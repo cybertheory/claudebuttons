@@ -43,6 +43,7 @@ export const ClaudeCodeButton: FC<ClaudeCodeButtonProps> = ({
   shape = 'rounded',
   popup = true,
   promptFlag = true,
+  autoLaunch,
   onCopy,
   popupTitle,
   popupDescription,
@@ -101,11 +102,12 @@ export const ClaudeCodeButton: FC<ClaudeCodeButtonProps> = ({
       shape,
       popup,
       promptFlag,
+      autoLaunch,
       onCopy,
       popupTitle,
       popupDescription,
     };
-  }, [command, theme, size, variant, shape, popup, promptFlag, onCopy, popupTitle, popupDescription]);
+  }, [command, theme, size, variant, shape, popup, promptFlag, autoLaunch, onCopy, popupTitle, popupDescription]);
 
   return createElement('div', {
     ref: containerRef,
@@ -123,6 +125,7 @@ export const CoworkButton: FC<CoworkButtonProps> = ({
   variant = 'filled',
   shape = 'rounded',
   popup = true,
+  autoLaunch,
   onCopy,
   onDownload,
   popupTitle,
@@ -185,12 +188,13 @@ export const CoworkButton: FC<CoworkButtonProps> = ({
       variant,
       shape,
       popup,
+      autoLaunch,
       onCopy,
       onDownload,
       popupTitle,
       popupDescription,
     };
-  }, [command, skillUrl, theme, size, variant, shape, popup, onCopy, onDownload, popupTitle, popupDescription]);
+  }, [command, skillUrl, theme, size, variant, shape, popup, autoLaunch, onCopy, onDownload, popupTitle, popupDescription]);
 
   return createElement('div', {
     ref: containerRef,

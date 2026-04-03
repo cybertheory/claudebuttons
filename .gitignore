@@ -1,4 +1,5 @@
 node_modules/
+.clrun/
 dist/
 *.tgz
 .DS_Store

@@ -240,7 +240,7 @@
 
   <!-- ═══ HERO ═══ -->
   <header class="hero">
-    <div class="hero-pill"><span class="dot"></span> v1.1.0</div>
+    <div class="hero-pill"><span class="dot"></span> v1.2.0</div>
     <h1><span class="accent">claude</span>buttons</h1>
     <p class="subtitle">
       Drop-in "Run on Claude Code" and "Run on Cowork" buttons for any website.
@@ -251,8 +251,8 @@
       <button class="hero-install-copy" onclick="navigator.clipboard.writeText('npm i claudebuttons').then(()=>{this.innerHTML='<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><polyline points=&quot;20 6 9 17 4 12&quot;/></svg>';this.style.color='#22c55e';setTimeout(()=>{this.innerHTML='<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><rect x=&quot;9&quot; y=&quot;9&quot; width=&quot;13&quot; height=&quot;13&quot; rx=&quot;2&quot;/><path d=&quot;M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1&quot;/></svg>';this.style.color='';},1500);})" aria-label="Copy install command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
     </div>
     <div class="hero-buttons">
-      <claude-code-button command="Install and run the todo-app starter from https://github.com/acme/todo-starter" theme="branded" size="lg"></claude-code-button>
-      <cowork-button command="/research-assistant" skill-url="https://example.com/research-assistant.zip" theme="branded" size="lg" variant="outline"></cowork-button>
+      <claude-code-button command="Install and run the todo-app starter from https://github.com/acme/todo-starter" theme="branded" size="lg" auto-launch></claude-code-button>
+      <cowork-button command="/research-assistant" skill-url="https://example.com/research-assistant.zip" theme="branded" size="lg" variant="outline" auto-launch></cowork-button>
     </div>
     <div class="hero-notice">
       <svg class="hero-notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
@@ -585,7 +585,7 @@
         <span class="section-tag">Events</span>
         <h2 class="section-title">Live Event Log</h2>
       </div>
-      <p class="section-desc">Click any button above — all <code style="color:var(--terra)">cb-copy</code>, <code style="color:var(--terra)">cb-open</code>, <code style="color:var(--terra)">cb-close</code>, and <code style="color:var(--terra)">cb-download</code> events are logged here.</p>
+      <p class="section-desc">Click any button above — <code style="color:var(--terra)">cb-copy</code>, <code style="color:var(--terra)">cb-open</code>, <code style="color:var(--terra)">cb-close</code>, <code style="color:var(--terra)">cb-download</code>, <code style="color:var(--terra)">cb-launch-desktop</code>, and <code style="color:var(--terra)">cb-launch-terminal</code> are logged here. Hero buttons use <code style="color:var(--terra)">auto-launch</code> to trigger the app/terminal shortcut when the dialog opens (when supported).</p>
       <div class="log-panel">
         <div class="log-header">
           <span class="log-header-title"><span class="dot-green"></span>Event listener</span>
@@ -728,7 +728,7 @@
       logBody.scrollTop = logBody.scrollHeight;
     }
 
-    ['cb-copy', 'cb-open', 'cb-close', 'cb-download'].forEach(event => {
+    ['cb-copy', 'cb-open', 'cb-close', 'cb-download', 'cb-launch-desktop', 'cb-launch-terminal'].forEach(event => {
       document.addEventListener(event, (e) => addLog(event, e.detail));
     });
 

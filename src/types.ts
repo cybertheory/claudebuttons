@@ -24,6 +24,12 @@ export interface ClaudeCodeButtonOptions {
   popupTitle?: string;
   /** Custom popup description */
   popupDescription?: string;
+  /**
+   * When true (with popup), opening the dialog also triggers the launch shortcut once
+   * in the same user gesture (Open Terminal / Open Claude Desktop) if supported.
+   * Launch controls stay visible for manual retry.
+   */
+  autoLaunch?: boolean;
 }
 
 export interface CoworkButtonOptions {
@@ -49,6 +55,11 @@ export interface CoworkButtonOptions {
   popupTitle?: string;
   /** Custom popup description */
   popupDescription?: string;
+  /**
+   * When true (with popup), opening the dialog also triggers the launch shortcut once
+   * in the same user gesture (Open Claude Desktop) if supported.
+   */
+  autoLaunch?: boolean;
 }
 
 export interface PopupOptions {
@@ -61,6 +72,11 @@ export interface PopupOptions {
   skillUrl?: string;
   /** Custom URL to open Claude Desktop from the Cowork popup. Default: `claude://` */
   desktopLaunchUrl?: string;
+  /**
+   * When true, after the dialog opens, immediately triggers the same action as the
+   * launch button once (if that environment supports it). Buttons remain for manual use.
+   */
+  autoLaunch?: boolean;
   onCopy?: (command: string) => void;
   onClose?: () => void;
 }

@@ -1,5 +1,14 @@
 export type { Theme, Size, Variant, Shape, ClaudeCodeButtonOptions, CoworkButtonOptions, PopupOptions, ThemeTokens } from './types';
 
+export {
+  isDesktopAppLinkSupported,
+  isTerminalLaunchSupported,
+  isRestrictedEmbeddedBrowser,
+  isMobileOrTabletDevice,
+  isDesktopComputerOs,
+  canUseClipboardWithGesture,
+} from './launch-capabilities';
+
 export { ClaudeCodeButton, createClaudeCodeButton, registerClaudeCodeButton } from './claude-code-button';
 export { CoworkButton, createCoworkButton, registerCoworkButton } from './cowork-button';
 export { ClaudePopupDialog, showPopup } from './popup-dialog';

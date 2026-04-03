@@ -243,7 +243,7 @@ const BUTTON_STYLES = `
 `;
 
 export class ClaudeCodeButton extends HTMLElement {
-  static observedAttributes = ['command', 'theme', 'size', 'variant', 'shape', 'popup', 'prompt-flag', 'popup-title', 'popup-description'];
+  static observedAttributes = ['command', 'theme', 'size', 'variant', 'shape', 'popup', 'prompt-flag', 'popup-title', 'popup-description', 'auto-launch'];
 
   private _options: ClaudeCodeButtonOptions = {
     command: '',
@@ -300,6 +300,7 @@ export class ClaudeCodeButton extends HTMLElement {
     const promptFlag = this.getAttribute('prompt-flag');
     const popupTitle = this.getAttribute('popup-title');
     const popupDescription = this.getAttribute('popup-description');
+    const autoLaunch = this.getAttribute('auto-launch');
 
     if (command !== null) this._options.command = command;
     if (theme) this._options.theme = theme;
@@ -310,6 +311,11 @@ export class ClaudeCodeButton extends HTMLElement {
     if (promptFlag !== null) this._options.promptFlag = promptFlag !== 'false';
     if (popupTitle !== null) this._options.popupTitle = popupTitle;
     if (popupDescription !== null) this._options.popupDescription = popupDescription;
+    if (autoLaunch === null) {
+      delete this._options.autoLaunch;
+    } else {
+      this._options.autoLaunch = autoLaunch !== 'false';
+    }
   }
 
   private updateLightDOM() {
@@ -412,7 +418,7 @@ export class ClaudeCodeButton extends HTMLElement {
   }
 
   private handleClick() {
-    const { popup, command, popupTitle, popupDescription } = this._options;
+    const { popup, command, popupTitle, popupDescription, autoLaunch } = this._options;
     const fullCommand = this.getFullCommand();
 
     this.dispatchEvent(new CustomEvent('cb-open', {
@@ -440,6 +446,7 @@ export class ClaudeCodeButton extends HTMLElement {
       description: popupDescription || 'Execute this command in your terminal to get started.',
       command,
       fullCommand,
+      autoLaunch: autoLaunch === true,
       onCopy: (cmd) => {
         this._options.onCopy?.(cmd);
         this.dispatchEvent(new CustomEvent('cb-copy', {

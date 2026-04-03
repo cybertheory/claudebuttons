@@ -9,6 +9,10 @@ import {
   DESKTOP_APP_ICON,
 } from './icons';
 import { resolveTheme, themeToCSS, BRAND_COLOR, BRAND_COLOR_HOVER } from './themes';
+import {
+  isDesktopAppLinkSupported,
+  isTerminalLaunchSupported,
+} from './launch-capabilities';
 
 const POPUP_STYLES = `
   :host {
@@ -243,6 +247,112 @@ const POPUP_STYLES = `
     border: 1px solid var(--cb-border);
   }
 
+  .cb-launch-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease, background 0.2s ease, color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cb-launch-btn:active:not(:disabled) { transform: scale(0.99); }
+
+  .cb-launch-btn .cb-launch-svg {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  .cb-launch-btn--desktop {
+    color: var(--cb-surface-text);
+    background: linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--cb-primary) 14%, var(--cb-surface)) 0%,
+      var(--cb-surface) 55%
+    );
+    border: 1.5px solid color-mix(in srgb, var(--cb-primary) 38%, var(--cb-border));
+    box-shadow:
+      0 1px 0 color-mix(in srgb, white 55%, transparent) inset,
+      0 4px 14px -4px color-mix(in srgb, var(--cb-primary) 35%, transparent);
+  }
+
+  .cb-launch-btn--desktop:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--cb-primary) 72%, var(--cb-border));
+    box-shadow:
+      0 1px 0 color-mix(in srgb, white 45%, transparent) inset,
+      0 8px 24px -6px color-mix(in srgb, var(--cb-primary) 45%, transparent);
+  }
+
+  .cb-launch-btn--desktop:focus-visible {
+    outline: 2px solid var(--cb-primary);
+    outline-offset: 2px;
+  }
+
+  .cb-launch-btn--terminal {
+    color: var(--cb-code-text);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--cb-code-text) 8%, var(--cb-code-bg)) 0%, var(--cb-code-bg) 100%);
+    border: 1px solid color-mix(in srgb, var(--cb-code-text) 22%, var(--cb-code-bg));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, black 25%, transparent) inset,
+      0 6px 20px -8px rgba(0, 0, 0, 0.45);
+  }
+
+  .cb-launch-btn--terminal:hover:not(:disabled) {
+    border-color: color-mix(in srgb, #34d399 55%, var(--cb-code-bg));
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, #34d399 20%, transparent) inset,
+      0 8px 28px -8px color-mix(in srgb, #34d399 28%, transparent);
+  }
+
+  .cb-launch-btn--terminal:focus-visible {
+    outline: 2px solid #34d399;
+    outline-offset: 2px;
+  }
+
+  .cb-launch-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    filter: saturate(0.7);
+    box-shadow: none;
+  }
+
+  .cb-launch-btn--desktop:disabled {
+    background: var(--cb-border);
+    border-color: var(--cb-border);
+    color: var(--cb-muted);
+  }
+
+  .cb-launch-btn--terminal:disabled {
+    background: var(--cb-border);
+    border-color: var(--cb-border);
+    color: var(--cb-muted);
+  }
+
+  .cb-launch-btn:disabled .cb-launch-svg {
+    opacity: 0.75;
+  }
+
+  .cb-launch-sub {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--cb-muted);
+    line-height: 1.35;
+    text-align: center;
+  }
+
   @keyframes cb-fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -275,6 +385,9 @@ const POPUP_STYLES = `
     .cb-code-block { font-size: 12px; padding: 2px 2px 2px 10px; border-radius: 8px; }
     .cb-copy-btn { height: 32px; padding: 0 10px; font-size: 11px; border-radius: 6px; }
     .cb-action-btn { height: 40px; font-size: 13px; border-radius: 8px; }
+    .cb-launch-btn { min-height: 46px; padding: 10px 14px; font-size: 13px; border-radius: 10px; }
+    .cb-launch-btn .cb-launch-svg { width: 20px; height: 20px; }
+    .cb-launch-sub { font-size: 10px; }
     .cb-hint { font-size: 11px; }
   }
 
@@ -292,6 +405,8 @@ const POPUP_STYLES = `
 export class ClaudePopupDialog extends HTMLElement {
   private _options!: PopupOptions;
   private _mqCleanup: (() => void) | null = null;
+  /** Prevents auto-launch from firing on every theme re-render; reset when `options` is set. */
+  private _autoLaunchConsumed = false;
 
   constructor() {
     super();
@@ -299,6 +414,7 @@ export class ClaudePopupDialog extends HTMLElement {
   }
 
   set options(opts: PopupOptions) {
+    this._autoLaunchConsumed = false;
     this._options = opts;
     this.render();
   }
@@ -336,12 +452,15 @@ export class ClaudePopupDialog extends HTMLElement {
   private render() {
     if (!this.shadowRoot || !this._options) return;
 
-    const { variant, title, description, command, fullCommand, skillUrl } = this._options;
+    const { variant, title, description, command, fullCommand, skillUrl, desktopLaunchUrl, autoLaunch } = this._options;
     const tokens = this.resolvePopupTokens();
     const icon = variant === 'claude-code' ? CLAUDE_CODE_ICON : COWORK_ICON;
 
     const isClaudeCode = variant === 'claude-code';
     const displayCommand = fullCommand || command;
+    const desktopHref = desktopLaunchUrl ?? 'claude://';
+    const desktopLaunchOk = isDesktopAppLinkSupported();
+    const terminalLaunchOk = isTerminalLaunchSupported();
 
     this.shadowRoot.innerHTML = `
       <style>${POPUP_STYLES}</style>
@@ -360,11 +479,9 @@ export class ClaudePopupDialog extends HTMLElement {
             ${isClaudeCode ? this.renderClaudeCodeBody(displayCommand) : this.renderCoworkBody(command, skillUrl)}
           </div>
           <div class="cb-dialog-footer">
-            ${isClaudeCode ? `
-              <div class="cb-hint">Press <kbd>⌘</kbd>+<kbd>V</kbd> or <kbd>Ctrl</kbd>+<kbd>V</kbd> in your terminal to run</div>
-            ` : `
-              <div class="cb-hint">Press <kbd>⌘</kbd>+<kbd>V</kbd> or <kbd>Ctrl</kbd>+<kbd>V</kbd> in your Cowork session to run</div>
-            `}
+            ${isClaudeCode
+              ? this.renderClaudeCodeFooter(displayCommand, terminalLaunchOk)
+              : this.renderCoworkFooter(this.escapeHref(desktopHref), desktopLaunchOk)}
           </div>
         </div>
       </div>
@@ -372,6 +489,33 @@ export class ClaudePopupDialog extends HTMLElement {
 
     this.setupListeners();
     this.setupSystemThemeWatch();
+
+    if (autoLaunch && !this._autoLaunchConsumed) {
+      this._autoLaunchConsumed = true;
+      if (variant === 'cowork' && desktopLaunchOk) {
+        this.openDesktopAppLink(desktopHref);
+      } else if (variant === 'claude-code' && terminalLaunchOk) {
+        const termBtn = this.shadowRoot?.querySelector('[data-action="launch-terminal"]') as HTMLElement | null;
+        if (termBtn) void this.launchTerminal(termBtn, displayCommand);
+      }
+    }
+  }
+
+  /** Programmatic open (same as clicking the desktop launch control). */
+  private openDesktopAppLink(href: string) {
+    this.dispatchEvent(new CustomEvent('cb-launch-desktop', {
+      bubbles: true,
+      composed: true,
+      detail: { href },
+    }));
+    if (typeof document === 'undefined') return;
+    const a = document.createElement('a');
+    a.href = href;
+    a.rel = 'noopener noreferrer';
+    a.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;pointer-events:none';
+    document.body.appendChild(a);
+    a.click();
+    requestAnimationFrame(() => a.remove());
   }
 
   private renderClaudeCodeBody(command: string): string {
@@ -442,6 +586,133 @@ export class ClaudePopupDialog extends HTMLElement {
     return steps;
   }
 
+  private renderCoworkFooter(desktopHrefEscaped: string, enabled: boolean): string {
+    const disabledTitle = 'Open this page in Safari, Chrome, Firefox, or Edge. In-app browsers usually block opening apps.';
+    const sub = enabled
+      ? 'Opens the Claude app through your system link handler—then paste the prompt below into Cowork.'
+      : 'App links aren’t supported in your current browser (common inside social or chat apps). Open this page in a full browser, or launch Claude Desktop manually and paste below.';
+
+    const control = enabled
+      ? `
+      <a
+        class="cb-launch-btn cb-launch-btn--desktop"
+        href="${desktopHrefEscaped}"
+        data-action="launch-desktop"
+        rel="noopener noreferrer"
+      >
+        ${DESKTOP_APP_ICON}
+        <span>Open Claude Desktop</span>
+      </a>`
+      : `
+      <button
+        type="button"
+        class="cb-launch-btn cb-launch-btn--desktop"
+        disabled
+        aria-disabled="true"
+        aria-label="Open Claude Desktop (unavailable in this browser)"
+        title="${this.escapeAttr(disabledTitle)}"
+      >
+        ${DESKTOP_APP_ICON}
+        <span>Open Claude Desktop</span>
+      </button>`;
+
+    return `
+      ${control}
+      <span class="cb-launch-sub">${this.escapeHtml(sub)}</span>
+      <div class="cb-hint">Press <kbd>⌘</kbd>+<kbd>V</kbd> or <kbd>Ctrl</kbd>+<kbd>V</kbd> in your Cowork session to run</div>
+    `;
+  }
+
+  private renderClaudeCodeFooter(displayCommand: string, enabled: boolean): string {
+    const disabledTitle = 'Available on desktop in a normal browser with clipboard access. Use Copy above, then paste into your terminal.';
+    const sub = this.getTerminalLaunchSubcopy(enabled);
+
+    const control = enabled
+      ? `
+      <button
+        type="button"
+        class="cb-launch-btn cb-launch-btn--terminal"
+        data-action="launch-terminal"
+        data-command="${this.escapeAttr(displayCommand)}"
+        aria-label="Copy command and open a terminal app"
+      >
+        ${TERMINAL_LAUNCH_ICON}
+        <span>Open Terminal</span>
+      </button>`
+      : `
+      <button
+        type="button"
+        class="cb-launch-btn cb-launch-btn--terminal"
+        disabled
+        aria-disabled="true"
+        aria-label="Open Terminal (unavailable in this environment)"
+        title="${this.escapeAttr(disabledTitle)}"
+      >
+        ${TERMINAL_LAUNCH_ICON}
+        <span>Open Terminal</span>
+      </button>`;
+
+    return `
+      ${control}
+      <span class="cb-launch-sub">${this.escapeHtml(sub)}</span>
+      <div class="cb-hint">Press <kbd>⌘</kbd>+<kbd>V</kbd> or <kbd>Ctrl</kbd>+<kbd>V</kbd> in your terminal to run</div>
+    `;
+  }
+
+  private static isDesktopMac(): boolean {
+    if (typeof navigator === 'undefined') return false;
+    const p = navigator.platform || '';
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    if (isIOS) return false;
+    return /Mac/.test(p) || /Mac OS X/.test(ua);
+  }
+
+  private getTerminalLaunchSubcopy(enabled: boolean): string {
+    if (!enabled) {
+      return 'Use the Copy button above, then paste into Terminal, PowerShell, or your preferred shell on a desktop computer.';
+    }
+    if (typeof navigator === 'undefined') {
+      return 'Copies the command to your clipboard first.';
+    }
+    const ua = navigator.userAgent || '';
+    if (/iPhone|iPad|iPod|Android/i.test(ua)) {
+      return 'Copies the command to your clipboard. Open a terminal or SSH client on your device to run it.';
+    }
+    if (ClaudePopupDialog.isDesktopMac()) {
+      return 'Copies the command, then tries to open iTerm if you have it—otherwise open Terminal and paste.';
+    }
+    return 'Copies the command, then tries to open VS Code if installed—paste into its terminal, or use any shell.';
+  }
+
+  private getTerminalProtocolUrl(): string | null {
+    if (typeof navigator === 'undefined') return null;
+    const ua = navigator.userAgent || '';
+    if (/iPhone|iPad|iPod|Android/i.test(ua)) return null;
+    if (ClaudePopupDialog.isDesktopMac()) return 'iterm2://';
+    return 'vscode://';
+  }
+
+  private tryOpenCustomProtocol(url: string) {
+    if (typeof document === 'undefined') return;
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'position:fixed;width:0;height:0;border:none;opacity:0;pointer-events:none';
+    iframe.setAttribute('tabindex', '-1');
+    iframe.setAttribute('aria-hidden', 'true');
+    iframe.src = url;
+    document.body.appendChild(iframe);
+    window.setTimeout(() => iframe.remove(), 1200);
+  }
+
+  private escapeHref(str: string): string {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
   private setupListeners() {
     if (!this.shadowRoot) return;
 
@@ -456,6 +727,13 @@ export class ClaudePopupDialog extends HTMLElement {
       } else if (action === 'copy') {
         const cmd = target.dataset.command || '';
         this.copyToClipboard(cmd, target);
+      } else if (action === 'launch-desktop') {
+        e.preventDefault();
+        const raw = (target as HTMLAnchorElement).getAttribute('href') || '';
+        this.openDesktopAppLink(raw || (target as HTMLAnchorElement).href);
+      } else if (action === 'launch-terminal') {
+        const cmd = target.dataset.command || '';
+        void this.launchTerminal(target, cmd);
       }
     });
 
@@ -476,6 +754,54 @@ export class ClaudePopupDialog extends HTMLElement {
     const handler = () => this.render();
     mq.addEventListener('change', handler);
     this._mqCleanup = () => mq.removeEventListener('change', handler);
+  }
+
+  private async launchTerminal(button: HTMLElement, fullCommand: string) {
+    const label = button.querySelector('span');
+
+    try {
+      await navigator.clipboard.writeText(fullCommand);
+      this._options.onCopy?.(fullCommand);
+
+      const proto = this.getTerminalProtocolUrl();
+      if (proto) this.tryOpenCustomProtocol(proto);
+
+      if (label) label.textContent = 'Copied!';
+
+      this.dispatchEvent(new CustomEvent('cb-launch-terminal', {
+        bubbles: true,
+        composed: true,
+        detail: { command: fullCommand },
+      }));
+
+      window.setTimeout(() => {
+        if (label) label.textContent = 'Open Terminal';
+      }, 2000);
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = fullCommand;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+
+      this._options.onCopy?.(fullCommand);
+      const proto = this.getTerminalProtocolUrl();
+      if (proto) this.tryOpenCustomProtocol(proto);
+
+      if (label) label.textContent = 'Copied!';
+      this.dispatchEvent(new CustomEvent('cb-launch-terminal', {
+        bubbles: true,
+        composed: true,
+        detail: { command: fullCommand },
+      }));
+
+      window.setTimeout(() => {
+        if (label) label.textContent = 'Open Terminal';
+      }, 2000);
+    }
   }
 
   private async copyToClipboard(command: string, button: HTMLElement) {

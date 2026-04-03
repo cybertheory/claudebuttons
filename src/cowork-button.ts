@@ -245,7 +245,7 @@ const BUTTON_STYLES = `
 `;
 
 export class CoworkButton extends HTMLElement {
-  static observedAttributes = ['command', 'skill-url', 'theme', 'size', 'variant', 'shape', 'popup', 'popup-title', 'popup-description'];
+  static observedAttributes = ['command', 'skill-url', 'theme', 'size', 'variant', 'shape', 'popup', 'popup-title', 'popup-description', 'auto-launch'];
 
   private _options: CoworkButtonOptions = {
     command: '',
@@ -301,6 +301,7 @@ export class CoworkButton extends HTMLElement {
     const popup = this.getAttribute('popup');
     const popupTitle = this.getAttribute('popup-title');
     const popupDescription = this.getAttribute('popup-description');
+    const autoLaunch = this.getAttribute('auto-launch');
 
     if (command !== null) this._options.command = command;
     if (skillUrl !== null) this._options.skillUrl = skillUrl;
@@ -311,6 +312,11 @@ export class CoworkButton extends HTMLElement {
     if (popup !== null) this._options.popup = popup !== 'false';
     if (popupTitle !== null) this._options.popupTitle = popupTitle;
     if (popupDescription !== null) this._options.popupDescription = popupDescription;
+    if (autoLaunch === null) {
+      delete this._options.autoLaunch;
+    } else {
+      this._options.autoLaunch = autoLaunch !== 'false';
+    }
   }
 
   private updateLightDOM() {
@@ -411,7 +417,7 @@ export class CoworkButton extends HTMLElement {
   }
 
   private handleClick() {
-    const { popup, command, skillUrl, popupTitle, popupDescription } = this._options;
+    const { popup, command, skillUrl, popupTitle, popupDescription, autoLaunch } = this._options;
 
     this.dispatchEvent(new CustomEvent('cb-open', {
       bubbles: true,
@@ -438,6 +444,7 @@ export class CoworkButton extends HTMLElement {
       description: popupDescription || 'Copy and paste into a Cowork session to get started.',
       command,
       skillUrl,
+      autoLaunch: autoLaunch === true,
       onCopy: (cmd) => {
         this._options.onCopy?.(cmd);
         this.dispatchEvent(new CustomEvent('cb-copy', {
