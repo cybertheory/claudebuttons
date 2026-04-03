@@ -231,6 +231,44 @@
     .footer { text-align: center; padding: 48px 24px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--dark-border); }
     .footer a { color: var(--terra); text-decoration: none; }
     .footer a:hover { text-decoration: underline; }
+
+    /* Cross-demo family nav */
+    .family-demos {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+      gap: 10px 14px; margin-top: 28px; max-width: 640px; margin-left: auto; margin-right: auto;
+    }
+    .family-demos-label {
+      width: 100%; text-align: center;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted-2);
+    }
+    .family-demos-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .family-demo-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 999px;
+      font-size: 12px; font-weight: 600; letter-spacing: -0.01em;
+      text-decoration: none; color: #F5F0EB;
+      border: 1px solid var(--dark-border); background: var(--dark-2);
+      transition: transform 0.15s ease, border-color 0.15s, box-shadow 0.2s ease;
+    }
+    .family-demo-chip:hover {
+      transform: translateY(-1px);
+      border-color: var(--muted-2);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    }
+    .family-demo-chip .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .family-demo-chip--claude { border-color: rgba(212,121,92,0.35); }
+    .family-demo-chip--claude .dot { background: var(--terra); box-shadow: 0 0 12px var(--terra-glow); }
+    .family-demo-chip--claude[aria-current="page"] {
+      background: rgba(212,121,92,0.12); border-color: rgba(212,121,92,0.5);
+      box-shadow: 0 0 0 1px rgba(212,121,92,0.2);
+    }
+    .family-demo-chip--agent { border-color: rgba(43,140,255,0.3); }
+    .family-demo-chip--agent .dot { background: #2b8cff; box-shadow: 0 0 12px rgba(43,140,255,0.35); }
+    .family-demo-chip--claw { border-color: rgba(231,76,60,0.35); }
+    .family-demo-chip--claw .dot { background: #E74C3C; box-shadow: 0 0 12px rgba(231,76,60,0.25); }
+    .family-demo-chip--hermes { border-color: rgba(43,140,255,0.28); }
+    .family-demo-chip--hermes .dot { background: #2B8CFF; }
   </style>
 </head>
 <body>
@@ -246,6 +284,15 @@
       Drop-in "Run on Claude Code" and "Run on Cowork" buttons for any website.
       Framework-agnostic Web Components with three visual variants.
     </p>
+    <nav class="family-demos" aria-label="Related live demos">
+      <span class="family-demos-label">More button libraries</span>
+      <div class="family-demos-links">
+        <a class="family-demo-chip family-demo-chip--claude" href="https://claudebuttons.vercel.app/" aria-current="page"><span class="dot" aria-hidden="true"></span>claudebuttons</a>
+        <a class="family-demo-chip family-demo-chip--agent" href="https://agentbuttons.vercel.app/" target="_blank" rel="noopener noreferrer"><span class="dot" aria-hidden="true"></span>agentbuttons</a>
+        <a class="family-demo-chip family-demo-chip--claw" href="https://clawbuttons.vercel.app/" target="_blank" rel="noopener noreferrer"><span class="dot" aria-hidden="true"></span>clawbuttons</a>
+        <a class="family-demo-chip family-demo-chip--hermes" href="https://hermesbuttons.vercel.app/" target="_blank" rel="noopener noreferrer"><span class="dot" aria-hidden="true"></span>hermesbuttons</a>
+      </div>
+    </nav>
     <div class="hero-install">
       <div class="hero-install-text">$ <span>npm i claudebuttons</span></div>
       <button class="hero-install-copy" onclick="navigator.clipboard.writeText('npm i claudebuttons').then(()=>{this.innerHTML='<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><polyline points=&quot;20 6 9 17 4 12&quot;/></svg>';this.style.color='#22c55e';setTimeout(()=>{this.innerHTML='<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><rect x=&quot;9&quot; y=&quot;9&quot; width=&quot;13&quot; height=&quot;13&quot; rx=&quot;2&quot;/><path d=&quot;M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1&quot;/></svg>';this.style.color='';},1500);})" aria-label="Copy install command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
