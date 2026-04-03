@@ -17,6 +17,18 @@ export const themes: Record<Exclude<Theme, 'system'>, ThemeTokens> = {
     codeBg: '#1C1917',
     codeText: '#F5F0EB',
   },
+  'branded-alt': {
+    bg: '#6B5CE7',
+    text: '#FFFFFF',
+    border: 'transparent',
+    surface: '#FFFFFF',
+    surfaceText: '#1C1917',
+    muted: '#78716C',
+    primary: '#6B5CE7',
+    primaryText: '#FFFFFF',
+    codeBg: '#1C1917',
+    codeText: '#F5F0EB',
+  },
   dark: {
     bg: '#1C1917',
     text: '#F5F0EB',
@@ -66,8 +78,16 @@ export function themeToCSS(tokens: ThemeTokens): string {
   `;
 }
 
+export const ALT_BRAND_COLOR = '#6B5CE7';
+
+export const SHAPE_MAP = {
+  rounded: { sm: '0.375rem', md: '0.5rem', lg: '0.625rem' },
+  pill:    { sm: '999px',    md: '999px',  lg: '999px' },
+  square:  { sm: '0',        md: '0',      lg: '0' },
+} as const;
+
 export const SIZE_MAP = {
-  sm: { height: '2rem', fontSize: '0.75rem', iconSize: '0.875rem', padding: '0 0.75rem', gap: '0.375rem', radius: '0.375rem' },
-  md: { height: '2.5rem', fontSize: '0.875rem', iconSize: '1.125rem', padding: '0 1rem', gap: '0.5rem', radius: '0.5rem' },
-  lg: { height: '3rem', fontSize: '1rem', iconSize: '1.375rem', padding: '0 1.25rem', gap: '0.625rem', radius: '0.625rem' },
+  sm: { height: '2rem', fontSize: '0.75rem', iconSize: '0.875rem', padding: '0 0.75rem', ccPadding: '0 0.5rem', gap: '0.375rem', radius: '0.375rem' },
+  md: { height: '2.5rem', fontSize: '0.875rem', iconSize: '1.125rem', padding: '0 1rem', ccPadding: '0 0.75rem', gap: '0.5rem', radius: '0.5rem' },
+  lg: { height: '3rem', fontSize: '1rem', iconSize: '1.375rem', padding: '0 1.25rem', ccPadding: '0 1rem', gap: '0.625rem', radius: '0.625rem' },
 };

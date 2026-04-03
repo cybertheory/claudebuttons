@@ -1,5 +1,7 @@
-export type Theme = 'branded' | 'dark' | 'light' | 'system';
+export type Theme = 'branded' | 'branded-alt' | 'dark' | 'light' | 'system';
 export type Size = 'sm' | 'md' | 'lg';
+export type Variant = 'filled' | 'outline' | 'ghost';
+export type Shape = 'rounded' | 'pill' | 'square';
 
 export interface ClaudeCodeButtonOptions {
   /** The command or skill to run in Claude Code (e.g. "/my-skill --flag") */
@@ -8,6 +10,10 @@ export interface ClaudeCodeButtonOptions {
   theme?: Theme;
   /** Button size. Default: 'md' */
   size?: Size;
+  /** Visual variant. Default: 'filled' */
+  variant?: Variant;
+  /** Border radius shape. Default: 'rounded' */
+  shape?: Shape;
   /** Whether to show a popup dialog on click. Default: true */
   popup?: boolean;
   /** Custom prompt flag value (prepended as `claude -p`). Default: true */
@@ -29,6 +35,10 @@ export interface CoworkButtonOptions {
   theme?: Theme;
   /** Button size. Default: 'md' */
   size?: Size;
+  /** Visual variant. Default: 'filled' */
+  variant?: Variant;
+  /** Border radius shape. Default: 'rounded' */
+  shape?: Shape;
   /** Whether to show a popup dialog on click. Default: true */
   popup?: boolean;
   /** Callback fired after the command is copied */
@@ -50,7 +60,6 @@ export interface PopupOptions {
   fullCommand?: string;
   skillUrl?: string;
   onCopy?: (command: string) => void;
-  onDownload?: (url: string) => void;
   onClose?: () => void;
 }
 

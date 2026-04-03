@@ -1,5 +1,5 @@
 import type { PopupOptions, Theme } from './types';
-import { CLAUDE_CODE_ICON, COWORK_ICON, COPY_ICON, CHECK_ICON, DOWNLOAD_ICON, CLOSE_ICON, TERMINAL_ICON } from './icons';
+import { CLAUDE_CODE_ICON, COWORK_ICON, COPY_ICON, CHECK_ICON, CLOSE_ICON } from './icons';
 import { resolveTheme, themeToCSS, BRAND_COLOR, BRAND_COLOR_HOVER } from './themes';
 
 const POPUP_STYLES = `
@@ -328,7 +328,7 @@ export class ClaudePopupDialog extends HTMLElement {
             ${isClaudeCode ? `
               <div class="cb-hint">Press <kbd>⌘</kbd>+<kbd>V</kbd> or <kbd>Ctrl</kbd>+<kbd>V</kbd> in your terminal to run</div>
             ` : `
-              <div class="cb-hint">Type the slash command in your Cowork task window</div>
+              <div class="cb-hint">Press <kbd>⌘</kbd>+<kbd>V</kbd> or <kbd>Ctrl</kbd>+<kbd>V</kbd> in your Cowork session to run</div>
             `}
           </div>
         </div>
@@ -364,28 +364,22 @@ export class ClaudePopupDialog extends HTMLElement {
     let steps = '';
 
     if (skillUrl) {
+      const fullPrompt = `Install the skill from ${skillUrl} and run ${command}`;
       steps += `
         <div class="cb-step">
           <div class="cb-step-num">1</div>
           <div class="cb-step-content">
-            <div class="cb-step-label">Download and install the skill package</div>
-            <button class="cb-action-btn" data-action="download" data-url="${this.escapeAttr(skillUrl)}">${DOWNLOAD_ICON}<span>Download Skill</span></button>
+            <div class="cb-step-label">Copy this prompt to your clipboard</div>
+            <div class="cb-code-block">
+              <div class="cb-code-text">${this.escapeHtml(fullPrompt)}</div>
+              <button class="cb-copy-btn" data-action="copy" data-command="${this.escapeAttr(fullPrompt)}">${COPY_ICON}<span>Copy</span></button>
+            </div>
           </div>
         </div>
         <div class="cb-step">
           <div class="cb-step-num">2</div>
           <div class="cb-step-content">
-            <div class="cb-step-label">In Cowork, go to <strong>Customize → Skills → + Create skill</strong> and upload the file</div>
-          </div>
-        </div>
-        <div class="cb-step">
-          <div class="cb-step-num">3</div>
-          <div class="cb-step-content">
-            <div class="cb-step-label">Run the slash command</div>
-            <div class="cb-code-block">
-              <div class="cb-code-text">${this.escapeHtml(command)}</div>
-              <button class="cb-copy-btn" data-action="copy" data-command="${this.escapeAttr(command)}">${COPY_ICON}<span>Copy</span></button>
-            </div>
+            <div class="cb-step-label">Paste into a Cowork session — Claude will fetch the skill and set it up for you</div>
           </div>
         </div>
       `;
@@ -394,17 +388,17 @@ export class ClaudePopupDialog extends HTMLElement {
         <div class="cb-step">
           <div class="cb-step-num">1</div>
           <div class="cb-step-content">
-            <div class="cb-step-label">Open Claude Desktop and start a Cowork session</div>
+            <div class="cb-step-label">Copy this command to your clipboard</div>
+            <div class="cb-code-block">
+              <div class="cb-code-text">${this.escapeHtml(command)}</div>
+              <button class="cb-copy-btn" data-action="copy" data-command="${this.escapeAttr(command)}">${COPY_ICON}<span>Copy</span></button>
+            </div>
           </div>
         </div>
         <div class="cb-step">
           <div class="cb-step-num">2</div>
           <div class="cb-step-content">
-            <div class="cb-step-label">Run this command in the task window</div>
-            <div class="cb-code-block">
-              <div class="cb-code-text">${this.escapeHtml(command)}</div>
-              <button class="cb-copy-btn" data-action="copy" data-command="${this.escapeAttr(command)}">${COPY_ICON}<span>Copy</span></button>
-            </div>
+            <div class="cb-step-label">Paste and send in your Cowork session</div>
           </div>
         </div>
       `;
@@ -427,9 +421,6 @@ export class ClaudePopupDialog extends HTMLElement {
       } else if (action === 'copy') {
         const cmd = target.dataset.command || '';
         this.copyToClipboard(cmd, target);
-      } else if (action === 'download') {
-        const url = target.dataset.url || '';
-        this.downloadSkill(url);
       }
     });
 
@@ -481,18 +472,6 @@ export class ClaudePopupDialog extends HTMLElement {
 
       this._options.onCopy?.(command);
     }
-  }
-
-  private downloadSkill(url: string) {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = '';
-    a.rel = 'noopener noreferrer';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    this._options.onDownload?.(url);
   }
 
   close() {

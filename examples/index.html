@@ -12,6 +12,8 @@
     :root {
       --terra: #D4795C;
       --terra-glow: rgba(212, 121, 92, 0.15);
+      --purple: #6B5CE7;
+      --purple-glow: rgba(107, 92, 231, 0.15);
       --dark-1: #0C0A09;
       --dark-2: #1C1917;
       --dark-3: #292524;
@@ -30,364 +32,367 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ─── HERO ─── */
     .hero {
       position: relative;
       text-align: center;
       padding: 72px 24px 56px;
       overflow: hidden;
     }
-
     .hero::before {
       content: '';
       position: absolute;
-      top: -120px;
-      left: 50%;
+      top: -120px; left: 50%;
       transform: translateX(-50%);
-      width: 600px;
-      height: 400px;
+      width: 600px; height: 400px;
       background: radial-gradient(ellipse, var(--terra-glow) 0%, transparent 70%);
       pointer-events: none;
     }
-
     .hero-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      display: inline-flex; align-items: center; gap: 6px;
       padding: 5px 14px;
-      background: rgba(212, 121, 92, 0.1);
-      border: 1px solid rgba(212, 121, 92, 0.2);
+      background: rgba(212,121,92,0.1);
+      border: 1px solid rgba(212,121,92,0.2);
       border-radius: 100px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--terra);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      font-size: 12px; font-weight: 600; color: var(--terra);
+      letter-spacing: 0.04em; text-transform: uppercase;
       margin-bottom: 24px;
     }
-
     .hero-pill .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
+      width: 6px; height: 6px; border-radius: 50%;
       background: var(--terra);
       animation: pulse 2s ease-in-out infinite;
     }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .hero h1 {
+      font-size: clamp(36px,6vw,56px); font-weight: 800;
+      letter-spacing: -0.04em; line-height: 1.1;
+      margin-bottom: 16px; position: relative;
+    }
+    .hero h1 .accent { color: var(--terra); }
+    .hero .subtitle {
+      font-size: 17px; color: var(--muted);
+      max-width: 520px; margin: 0 auto; line-height: 1.6;
+    }
+    .hero-buttons {
+      display: flex; justify-content: center;
+      gap: 12px; margin-top: 32px; flex-wrap: wrap;
     }
 
-    .hero h1 {
-      font-size: clamp(36px, 6vw, 56px);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      line-height: 1.1;
-      margin-bottom: 16px;
+    .hero-install {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      margin-top: 24px;
+      background: var(--dark-2);
+      border: 1px solid var(--dark-border);
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13.5px;
+      line-height: 1;
+      overflow: hidden;
       position: relative;
     }
-
-    .hero h1 .accent { color: var(--terra); }
-
-    .hero .subtitle {
-      font-size: 17px;
+    .hero-install-text {
+      padding: 11px 14px;
       color: var(--muted);
-      max-width: 520px;
-      margin: 0 auto;
-      line-height: 1.6;
+      user-select: all;
+      white-space: nowrap;
     }
-
-    .hero-buttons {
+    .hero-install-text span { color: #F5F0EB; }
+    .hero-install-copy {
       display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 12px;
-      margin-top: 32px;
-      flex-wrap: wrap;
-    }
-
-    /* ─── CONTAINER ─── */
-    .container {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 0 24px 96px;
-    }
-
-    /* ─── SECTION ─── */
-    .section {
-      margin-top: 64px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .section-tag {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--terra);
-      background: var(--terra-glow);
-      padding: 3px 10px;
-      border-radius: 4px;
-    }
-
-    .section-title {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-
-    .section-desc {
-      font-size: 14px;
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-left: 1px solid var(--dark-border);
+      background: transparent;
       color: var(--muted);
-      margin-bottom: 20px;
-      line-height: 1.5;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .hero-install-copy:hover { background: var(--dark-3); color: #F5F0EB; }
+    .hero-install-copy svg { width: 15px; height: 15px; }
+
+    .hero-notice {
+      position: relative;
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 10px;
+      max-width: 540px;
+      margin: 28px auto 0;
+      padding: 14px 18px;
+      background: rgba(212, 121, 92, 0.06);
+      border: 1px solid rgba(212, 121, 92, 0.15);
+      border-radius: 12px;
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+    .hero-notice-icon {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+      color: var(--terra);
+      opacity: 0.8;
+    }
+    .hero-notice strong { color: #F5F0EB; font-weight: 600; }
+    .hero-notice code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      padding: 1px 6px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      color: var(--terra);
     }
 
-    /* ─── GRID ─── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 24px 96px; }
+
+    .section { margin-top: 64px; }
+    .section-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+    .section-tag {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--terra); background: var(--terra-glow);
+      padding: 3px 10px; border-radius: 4px;
     }
+    .section-tag--alt { color: var(--purple); background: var(--purple-glow); }
+    .section-title { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+    .section-desc { font-size: 14px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .grid-full { grid-template-columns: 1fr; }
 
     .card {
-      background: var(--dark-2);
-      border: 1px solid var(--dark-border);
-      border-radius: 14px;
-      padding: 24px;
+      background: var(--dark-2); border: 1px solid var(--dark-border);
+      border-radius: 14px; padding: 24px;
     }
-
-    .card--light {
-      background: var(--light-1);
-      border-color: var(--light-border);
-    }
-
+    .card--light { background: var(--light-1); border-color: var(--light-border); }
     .card-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 16px;
+      font-size: 12px; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px;
     }
-
     .card--light .card-label { color: var(--muted-2); }
 
-    .card-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-    }
+    .card-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .card-row + .card-row { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--dark-border); }
+    .card--light .card-row + .card-row { border-top-color: var(--light-border); }
 
-    .card-row + .card-row {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--dark-border);
-    }
-
-    .card--light .card-row + .card-row {
-      border-top-color: var(--light-border);
-    }
-
-    .size-label {
+    .label {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      min-width: 28px;
+      font-size: 11px; color: var(--muted); min-width: 50px;
     }
+    .card--light .label { color: var(--muted-2); }
 
-    .card--light .size-label { color: var(--muted-2); }
+    .log-section { margin-top: 64px; }
+    .log-panel { background: var(--dark-2); border: 1px solid var(--dark-border); border-radius: 14px; overflow: hidden; }
+    .log-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--dark-border); }
+    .log-header-title { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; color: var(--muted); }
+    .log-header-title .dot-green { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; margin-right: 8px; vertical-align: middle; }
+    .log-clear { padding: 4px 12px; background: transparent; border: 1px solid var(--dark-border); color: var(--muted); border-radius: 6px; font-family: inherit; font-size: 12px; cursor: pointer; transition: all 0.15s; }
+    .log-clear:hover { border-color: var(--muted); color: #F5F0EB; }
+    .log-body { padding: 16px 20px; max-height: 200px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.8; scrollbar-width: thin; scrollbar-color: var(--dark-border) transparent; }
+    .log-empty { color: var(--muted); font-style: italic; }
+    .log-entry { display: flex; gap: 10px; }
+    .log-time { color: var(--muted); flex-shrink: 0; }
+    .log-event { color: var(--terra); font-weight: 500; flex-shrink: 0; }
+    .log-detail { color: #F5F0EB; word-break: break-all; }
 
-    /* ─── LOG PANEL ─── */
-    .log-section {
-      margin-top: 64px;
-    }
-
-    .log-panel {
-      background: var(--dark-2);
-      border: 1px solid var(--dark-border);
-      border-radius: 14px;
-      overflow: hidden;
-    }
-
-    .log-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--dark-border);
-    }
-
-    .log-header-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--muted);
-    }
-
-    .log-header-title .dot-green {
-      display: inline-block;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #22c55e;
-      margin-right: 8px;
-      vertical-align: middle;
-    }
-
-    .log-clear {
-      padding: 4px 12px;
-      background: transparent;
-      border: 1px solid var(--dark-border);
-      color: var(--muted);
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .log-clear:hover {
-      border-color: var(--muted);
-      color: #F5F0EB;
-    }
-
-    .log-body {
-      padding: 16px 20px;
-      max-height: 200px;
-      overflow-y: auto;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      line-height: 1.8;
-      scrollbar-width: thin;
-      scrollbar-color: var(--dark-border) transparent;
-    }
-
-    .log-empty {
-      color: var(--muted);
-      font-style: italic;
-    }
-
-    .log-entry {
-      display: flex;
-      gap: 10px;
-    }
-
-    .log-time {
-      color: var(--muted);
-      flex-shrink: 0;
-    }
-
-    .log-event {
-      color: var(--terra);
-      font-weight: 500;
-      flex-shrink: 0;
-    }
-
-    .log-detail {
-      color: #F5F0EB;
-      word-break: break-all;
-    }
-
-    /* ─── CODE EXAMPLE ─── */
-    .code-section {
-      margin-top: 64px;
-    }
-
-    .code-tabs {
-      display: flex;
-      gap: 2px;
-      margin-bottom: -1px;
-      position: relative;
-      z-index: 1;
-    }
-
+    .code-section { margin-top: 64px; }
+    .code-tabs { display: flex; gap: 2px; margin-bottom: -1px; position: relative; z-index: 1; }
     .code-tab {
-      padding: 10px 18px;
-      background: transparent;
-      border: 1px solid transparent;
-      border-bottom: none;
-      color: var(--muted);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      cursor: pointer;
-      border-radius: 8px 8px 0 0;
-      transition: all 0.15s;
+      padding: 10px 18px; background: transparent;
+      border: 1px solid transparent; border-bottom: none;
+      color: var(--muted); font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; cursor: pointer;
+      border-radius: 8px 8px 0 0; transition: all 0.15s;
     }
-
-    .code-tab[data-active="true"] {
-      background: var(--dark-2);
-      border-color: var(--dark-border);
-      color: #F5F0EB;
-    }
-
-    .code-tab:hover:not([data-active="true"]) {
-      color: #F5F0EB;
-    }
-
+    .code-tab[data-active="true"] { background: var(--dark-2); border-color: var(--dark-border); color: #F5F0EB; }
+    .code-tab:hover:not([data-active="true"]) { color: #F5F0EB; }
     .code-block {
-      background: var(--dark-2);
-      border: 1px solid var(--dark-border);
-      border-radius: 0 14px 14px 14px;
-      padding: 20px 24px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      line-height: 1.7;
-      overflow-x: auto;
-      white-space: pre;
-      color: #F5F0EB;
-      display: none;
+      background: var(--dark-2); border: 1px solid var(--dark-border);
+      border-radius: 0 14px 14px 14px; padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      line-height: 1.7; overflow-x: auto; white-space: pre;
+      color: #F5F0EB; display: none;
     }
-
     .code-block[data-active="true"] { display: block; }
-
     .code-block .kw { color: var(--terra); }
     .code-block .str { color: #A8A29E; }
     .code-block .cmt { color: #57534E; }
     .code-block .tag { color: #78716C; }
     .code-block .fn { color: #FCD34D; }
 
-    /* ─── FOOTER ─── */
-    .footer {
-      text-align: center;
-      padding: 48px 24px;
-      color: var(--muted);
-      font-size: 13px;
-      border-top: 1px solid var(--dark-border);
-    }
-
-    .footer a {
-      color: var(--terra);
-      text-decoration: none;
-    }
-
+    .footer { text-align: center; padding: 48px 24px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--dark-border); }
+    .footer a { color: var(--terra); text-decoration: none; }
     .footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
+  <!-- For production after publishing: <script src="https://unpkg.com/claudebuttons"></script> -->
   <script src="../dist/index.global.js"></script>
 
   <!-- ═══ HERO ═══ -->
   <header class="hero">
-    <div class="hero-pill"><span class="dot"></span> v1.0.0</div>
+    <div class="hero-pill"><span class="dot"></span> v1.1.0</div>
     <h1><span class="accent">claude</span>buttons</h1>
     <p class="subtitle">
       Drop-in "Run on Claude Code" and "Run on Cowork" buttons for any website.
-      Framework-agnostic Web Components.
+      Framework-agnostic Web Components with three visual variants.
     </p>
+    <div class="hero-install">
+      <div class="hero-install-text">$ <span>npm i claudebuttons</span></div>
+      <button class="hero-install-copy" onclick="navigator.clipboard.writeText('npm i claudebuttons').then(()=>{this.innerHTML='<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><polyline points=&quot;20 6 9 17 4 12&quot;/></svg>';this.style.color='#22c55e';setTimeout(()=>{this.innerHTML='<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot; stroke-linecap=&quot;round&quot; stroke-linejoin=&quot;round&quot;><rect x=&quot;9&quot; y=&quot;9&quot; width=&quot;13&quot; height=&quot;13&quot; rx=&quot;2&quot;/><path d=&quot;M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1&quot;/></svg>';this.style.color='';},1500);})" aria-label="Copy install command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+    </div>
     <div class="hero-buttons">
-      <claude-code-button command="/hello-world" theme="branded" size="lg"></claude-code-button>
-      <cowork-button command="/hello-world" theme="branded" size="lg"></cowork-button>
+      <claude-code-button command="Install and run the todo-app starter from https://github.com/acme/todo-starter" theme="branded" size="lg"></claude-code-button>
+      <cowork-button command="/research-assistant" skill-url="https://example.com/research-assistant.zip" theme="branded" size="lg" variant="outline"></cowork-button>
+    </div>
+    <div class="hero-notice">
+      <svg class="hero-notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      <span>
+        <strong>Agent &amp; crawler friendly.</strong>
+        Every button embeds a hidden crawlable <code>&lt;a&gt;</code> link in the light DOM — skill URLs are directly discoverable by scrapers, search engines, and AI&nbsp;agents.
+        Call <code>injectStructuredData()</code> to emit Schema.org JSON&#8209;LD for the whole page.
+      </span>
     </div>
   </header>
 
   <div class="container">
+
+    <!-- ═══ VARIANTS ═══ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">Variant</span>
+        <h2 class="section-title">Filled / Outline / Ghost</h2>
+      </div>
+      <p class="section-desc">Three visual variants per button. Use <code style="color:var(--terra)">variant="outline"</code> or <code style="color:var(--terra)">variant="ghost"</code> for secondary actions or side-by-side differentiation.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="card-label">Claude Code</div>
+          <div class="card-row">
+            <span class="label">filled</span>
+            <claude-code-button command="Scaffold a Next.js app with Tailwind, Auth.js, and Prisma" theme="branded" variant="filled"></claude-code-button>
+          </div>
+          <div class="card-row">
+            <span class="label">outline</span>
+            <claude-code-button command="Scaffold a Next.js app with Tailwind, Auth.js, and Prisma" theme="branded" variant="outline"></claude-code-button>
+          </div>
+          <div class="card-row">
+            <span class="label">ghost</span>
+            <claude-code-button command="Scaffold a Next.js app with Tailwind, Auth.js, and Prisma" theme="branded" variant="ghost"></claude-code-button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Cowork</div>
+          <div class="card-row">
+            <span class="label">filled</span>
+            <cowork-button command="/competitive-analysis" theme="branded" variant="filled"></cowork-button>
+          </div>
+          <div class="card-row">
+            <span class="label">outline</span>
+            <cowork-button command="/competitive-analysis" theme="branded" variant="outline"></cowork-button>
+          </div>
+          <div class="card-row">
+            <span class="label">ghost</span>
+            <cowork-button command="/competitive-analysis" theme="branded" variant="ghost"></cowork-button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SHAPE ═══ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">Shape</span>
+        <h2 class="section-title">Rounded / Pill / Square</h2>
+      </div>
+      <p class="section-desc">Control the border radius with <code style="color:var(--terra)">shape="pill"</code> or <code style="color:var(--terra)">shape="square"</code>. Default is <code style="color:var(--terra)">rounded</code>.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="card-label">Claude Code</div>
+          <div class="card-row">
+            <span class="label">rounded</span>
+            <claude-code-button command="Add unit tests for all untested functions in src/" theme="branded" shape="rounded"></claude-code-button>
+          </div>
+          <div class="card-row">
+            <span class="label">pill</span>
+            <claude-code-button command="Add unit tests for all untested functions in src/" theme="branded" shape="pill"></claude-code-button>
+          </div>
+          <div class="card-row">
+            <span class="label">square</span>
+            <claude-code-button command="Add unit tests for all untested functions in src/" theme="branded" shape="square"></claude-code-button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Cowork</div>
+          <div class="card-row">
+            <span class="label">rounded</span>
+            <cowork-button command="/weekly-standup" theme="branded" shape="rounded"></cowork-button>
+          </div>
+          <div class="card-row">
+            <span class="label">pill</span>
+            <cowork-button command="/weekly-standup" theme="branded" shape="pill"></cowork-button>
+          </div>
+          <div class="card-row">
+            <span class="label">square</span>
+            <cowork-button command="/weekly-standup" theme="branded" shape="square"></cowork-button>
+          </div>
+        </div>
+      </div>
+      <div class="grid" style="margin-top: 16px;">
+        <div class="card">
+          <div class="card-label">Shape + Variant combos</div>
+          <div class="card-row">
+            <claude-code-button command="Migrate the codebase from Express to Hono" theme="branded" shape="pill" variant="outline"></claude-code-button>
+            <cowork-button command="/seo-audit" theme="branded" shape="pill" variant="outline"></cowork-button>
+          </div>
+          <div class="card-row">
+            <claude-code-button command="Migrate the codebase from Express to Hono" theme="branded" shape="square" variant="outline"></claude-code-button>
+            <cowork-button command="/seo-audit" theme="branded" shape="square" variant="ghost"></cowork-button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SIDE BY SIDE ═══ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">Pairing</span>
+        <h2 class="section-title">Side by Side</h2>
+      </div>
+      <p class="section-desc">Mix variants to visually differentiate buttons when placed together.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="card-label">Filled + Outline</div>
+          <div class="card-row">
+            <claude-code-button command="Set up a CI/CD pipeline with GitHub Actions" theme="branded"></claude-code-button>
+            <cowork-button command="/draft-blog-post" theme="branded" variant="outline"></cowork-button>
+          </div>
+          <div class="card-row">
+            <claude-code-button command="Set up a CI/CD pipeline with GitHub Actions" theme="branded" variant="outline"></claude-code-button>
+            <cowork-button command="/draft-blog-post" theme="branded"></cowork-button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Filled + Ghost</div>
+          <div class="card-row">
+            <claude-code-button command="Set up a CI/CD pipeline with GitHub Actions" theme="branded"></claude-code-button>
+            <cowork-button command="/draft-blog-post" theme="branded" variant="ghost"></cowork-button>
+          </div>
+          <div class="card-row">
+            <claude-code-button command="Set up a CI/CD pipeline with GitHub Actions" theme="branded" variant="ghost"></claude-code-button>
+            <cowork-button command="/draft-blog-post" theme="branded"></cowork-button>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- ═══ BRANDED ═══ -->
     <section class="section">
@@ -398,33 +403,82 @@
       <p class="section-desc">The default theme — terracotta background matching Claude's brand palette.</p>
       <div class="grid">
         <div class="card">
-          <div class="card-label">Claude Code</div>
+          <div class="card-label">Claude Code — sizes</div>
           <div class="card-row">
-            <span class="size-label">sm</span>
-            <claude-code-button command="/frontend-design --theme dark" theme="branded" size="sm"></claude-code-button>
+            <span class="label">sm</span>
+            <claude-code-button command="Refactor this file to use async/await instead of callbacks" theme="branded" size="sm"></claude-code-button>
           </div>
           <div class="card-row">
-            <span class="size-label">md</span>
-            <claude-code-button command="/frontend-design --theme dark" theme="branded" size="md"></claude-code-button>
+            <span class="label">md</span>
+            <claude-code-button command="Refactor this file to use async/await instead of callbacks" theme="branded" size="md"></claude-code-button>
           </div>
           <div class="card-row">
-            <span class="size-label">lg</span>
-            <claude-code-button command="/frontend-design --theme dark" theme="branded" size="lg"></claude-code-button>
+            <span class="label">lg</span>
+            <claude-code-button command="Refactor this file to use async/await instead of callbacks" theme="branded" size="lg"></claude-code-button>
           </div>
         </div>
         <div class="card">
-          <div class="card-label">Cowork</div>
+          <div class="card-label">Cowork — sizes</div>
           <div class="card-row">
-            <span class="size-label">sm</span>
-            <cowork-button command="/my-skill" theme="branded" size="sm"></cowork-button>
+            <span class="label">sm</span>
+            <cowork-button command="/meeting-notes" theme="branded" size="sm"></cowork-button>
           </div>
           <div class="card-row">
-            <span class="size-label">md</span>
-            <cowork-button command="/my-skill" theme="branded" size="md"></cowork-button>
+            <span class="label">md</span>
+            <cowork-button command="/meeting-notes" theme="branded" size="md"></cowork-button>
           </div>
           <div class="card-row">
-            <span class="size-label">lg</span>
-            <cowork-button command="/my-skill" skill-url="https://example.com/skill.zip" theme="branded" size="lg"></cowork-button>
+            <span class="label">lg</span>
+            <cowork-button command="/meeting-notes" skill-url="https://example.com/meeting-notes-skill.zip" theme="branded" size="lg"></cowork-button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ BRANDED ALT (PURPLE) ═══ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag section-tag--alt">Theme</span>
+        <h2 class="section-title">Branded Alt</h2>
+      </div>
+      <p class="section-desc">A secondary branded theme in purple — great for mixing with the default terracotta to differentiate two buttons at a glance.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="card-label">Filled</div>
+          <div class="card-row">
+            <claude-code-button command="Generate an OpenAPI spec from my Express routes" theme="branded-alt"></claude-code-button>
+            <cowork-button command="/brand-voice-guide" theme="branded-alt"></cowork-button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Outline</div>
+          <div class="card-row">
+            <claude-code-button command="Generate an OpenAPI spec from my Express routes" theme="branded-alt" variant="outline"></claude-code-button>
+            <cowork-button command="/brand-voice-guide" theme="branded-alt" variant="outline"></cowork-button>
+          </div>
+        </div>
+      </div>
+      <div class="grid" style="margin-top: 16px;">
+        <div class="card">
+          <div class="card-label">Mixed — branded + branded-alt</div>
+          <div class="card-row">
+            <claude-code-button command="Convert this REST API to GraphQL" theme="branded"></claude-code-button>
+            <cowork-button command="/product-roadmap" theme="branded-alt"></cowork-button>
+          </div>
+          <div class="card-row">
+            <claude-code-button command="Convert this REST API to GraphQL" theme="branded-alt"></claude-code-button>
+            <cowork-button command="/product-roadmap" theme="branded"></cowork-button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Mixed — branded filled + branded-alt outline</div>
+          <div class="card-row">
+            <claude-code-button command="Convert this REST API to GraphQL" theme="branded"></claude-code-button>
+            <cowork-button command="/product-roadmap" theme="branded-alt" variant="outline"></cowork-button>
+          </div>
+          <div class="card-row">
+            <claude-code-button command="Convert this REST API to GraphQL" theme="branded" variant="outline"></claude-code-button>
+            <cowork-button command="/product-roadmap" theme="branded-alt"></cowork-button>
           </div>
         </div>
       </div>
@@ -436,36 +490,24 @@
         <span class="section-tag">Theme</span>
         <h2 class="section-title">Dark</h2>
       </div>
-      <p class="section-desc">For dark UIs — dark surface with terracotta accents.</p>
+      <p class="section-desc">For dark UIs — dark surface with terracotta accents and icons.</p>
       <div class="grid">
         <div class="card">
-          <div class="card-label">Claude Code</div>
+          <div class="card-label">Variants</div>
           <div class="card-row">
-            <span class="size-label">sm</span>
-            <claude-code-button command="/deploy --prod" theme="dark" size="sm"></claude-code-button>
+            <span class="label">filled</span>
+            <claude-code-button command="Deploy to production with zero-downtime migration" theme="dark"></claude-code-button>
+            <cowork-button command="/incident-postmortem" theme="dark"></cowork-button>
           </div>
           <div class="card-row">
-            <span class="size-label">md</span>
-            <claude-code-button command="/deploy --prod" theme="dark" size="md"></claude-code-button>
+            <span class="label">outline</span>
+            <claude-code-button command="Deploy to production with zero-downtime migration" theme="dark" variant="outline"></claude-code-button>
+            <cowork-button command="/incident-postmortem" theme="dark" variant="outline"></cowork-button>
           </div>
           <div class="card-row">
-            <span class="size-label">lg</span>
-            <claude-code-button command="/deploy --prod" theme="dark" size="lg"></claude-code-button>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Cowork</div>
-          <div class="card-row">
-            <span class="size-label">sm</span>
-            <cowork-button command="/code-review" theme="dark" size="sm"></cowork-button>
-          </div>
-          <div class="card-row">
-            <span class="size-label">md</span>
-            <cowork-button command="/code-review" theme="dark" size="md"></cowork-button>
-          </div>
-          <div class="card-row">
-            <span class="size-label">lg</span>
-            <cowork-button command="/code-review" theme="dark" size="lg"></cowork-button>
+            <span class="label">ghost</span>
+            <claude-code-button command="Deploy to production with zero-downtime migration" theme="dark" variant="ghost"></claude-code-button>
+            <cowork-button command="/incident-postmortem" theme="dark" variant="ghost"></cowork-button>
           </div>
         </div>
       </div>
@@ -480,33 +522,21 @@
       <p class="section-desc">For light UIs — white surface with terracotta accents.</p>
       <div class="grid">
         <div class="card card--light">
-          <div class="card-label">Claude Code</div>
+          <div class="card-label">Variants</div>
           <div class="card-row">
-            <span class="size-label">sm</span>
-            <claude-code-button command="/test --coverage" theme="light" size="sm"></claude-code-button>
+            <span class="label">filled</span>
+            <claude-code-button command="Add comprehensive error handling and input validation" theme="light"></claude-code-button>
+            <cowork-button command="/user-interview-synthesis" theme="light"></cowork-button>
           </div>
           <div class="card-row">
-            <span class="size-label">md</span>
-            <claude-code-button command="/test --coverage" theme="light" size="md"></claude-code-button>
+            <span class="label">outline</span>
+            <claude-code-button command="Add comprehensive error handling and input validation" theme="light" variant="outline"></claude-code-button>
+            <cowork-button command="/user-interview-synthesis" theme="light" variant="outline"></cowork-button>
           </div>
           <div class="card-row">
-            <span class="size-label">lg</span>
-            <claude-code-button command="/test --coverage" theme="light" size="lg"></claude-code-button>
-          </div>
-        </div>
-        <div class="card card--light">
-          <div class="card-label">Cowork</div>
-          <div class="card-row">
-            <span class="size-label">sm</span>
-            <cowork-button command="/refactor" theme="light" size="sm"></cowork-button>
-          </div>
-          <div class="card-row">
-            <span class="size-label">md</span>
-            <cowork-button command="/refactor" theme="light" size="md"></cowork-button>
-          </div>
-          <div class="card-row">
-            <span class="size-label">lg</span>
-            <cowork-button command="/refactor" theme="light" size="lg"></cowork-button>
+            <span class="label">ghost</span>
+            <claude-code-button command="Add comprehensive error handling and input validation" theme="light" variant="ghost"></claude-code-button>
+            <cowork-button command="/user-interview-synthesis" theme="light" variant="ghost"></cowork-button>
           </div>
         </div>
       </div>
@@ -523,8 +553,12 @@
         <div class="card">
           <div class="card-label">Auto-detects <code style="color:var(--terra)">prefers-color-scheme</code></div>
           <div class="card-row">
-            <claude-code-button command="/auto-theme" theme="system"></claude-code-button>
-            <cowork-button command="/auto-theme" theme="system"></cowork-button>
+            <claude-code-button command="Optimize database queries and add connection pooling" theme="system"></claude-code-button>
+            <cowork-button command="/sprint-retrospective" theme="system"></cowork-button>
+          </div>
+          <div class="card-row">
+            <claude-code-button command="Optimize database queries and add connection pooling" theme="system" variant="outline"></claude-code-button>
+            <cowork-button command="/sprint-retrospective" theme="system" variant="outline"></cowork-button>
           </div>
         </div>
       </div>
@@ -574,35 +608,45 @@
         <button class="code-tab" data-tab="react">React</button>
         <button class="code-tab" data-tab="vue">Vue</button>
         <button class="code-tab" data-tab="svelte">Svelte</button>
-        <button class="code-tab" data-tab="angular">Angular</button>
       </div>
       <div class="code-block" data-tab="html" data-active="true"><span class="cmt">&lt;!-- CDN — no build step --&gt;</span>
 <span class="tag">&lt;script</span> <span class="kw">src</span>=<span class="str">"https://unpkg.com/claudebuttons"</span><span class="tag">&gt;&lt;/script&gt;</span>
 
+<span class="cmt">&lt;!-- Filled (default) --&gt;</span>
 <span class="tag">&lt;claude-code-button</span>
-  <span class="kw">command</span>=<span class="str">"/my-skill --flag"</span>
-  <span class="kw">theme</span>=<span class="str">"branded"</span>
+  <span class="kw">command</span>=<span class="str">"Clone and set up the monorepo with all dependencies"</span>
 <span class="tag">&gt;&lt;/claude-code-button&gt;</span>
 
+<span class="cmt">&lt;!-- Outline variant --&gt;</span>
 <span class="tag">&lt;cowork-button</span>
-  <span class="kw">command</span>=<span class="str">"/my-skill"</span>
-  <span class="kw">skill-url</span>=<span class="str">"https://example.com/skill.zip"</span>
-  <span class="kw">theme</span>=<span class="str">"dark"</span>
+  <span class="kw">command</span>=<span class="str">"/code-review"</span>
+  <span class="kw">variant</span>=<span class="str">"outline"</span>
+<span class="tag">&gt;&lt;/cowork-button&gt;</span>
+
+<span class="cmt">&lt;!-- Purple branded alt --&gt;</span>
+<span class="tag">&lt;cowork-button</span>
+  <span class="kw">command</span>=<span class="str">"/content-calendar"</span>
+  <span class="kw">theme</span>=<span class="str">"branded-alt"</span>
 <span class="tag">&gt;&lt;/cowork-button&gt;</span></div>
       <div class="code-block" data-tab="react"><span class="kw">import</span> { <span class="fn">ClaudeCodeButton</span>, <span class="fn">CoworkButton</span> } <span class="kw">from</span> <span class="str">'claudebuttons/react'</span>;
 
 <span class="kw">function</span> <span class="fn">App</span>() {
   <span class="kw">return</span> (
     &lt;&gt;
+      <span class="cmt">{/* Primary + secondary variant pairing */}</span>
       &lt;<span class="fn">ClaudeCodeButton</span>
-        <span class="kw">command</span>=<span class="str">"/my-skill --flag"</span>
-        <span class="kw">theme</span>=<span class="str">"branded"</span>
+        <span class="kw">command</span>=<span class="str">"Scaffold a Next.js app with auth and database"</span>
         <span class="kw">onCopy</span>={(<span class="str">cmd</span>) =&gt; console.<span class="fn">log</span>(<span class="str">'Copied:'</span>, cmd)}
       /&gt;
       &lt;<span class="fn">CoworkButton</span>
         <span class="kw">command</span>=<span class="str">"/code-review"</span>
-        <span class="kw">skillUrl</span>=<span class="str">"https://example.com/skill.zip"</span>
-        <span class="kw">theme</span>=<span class="str">"dark"</span>
+        <span class="kw">variant</span>=<span class="str">"outline"</span>
+      /&gt;
+
+      <span class="cmt">{/* Purple alt theme */}</span>
+      &lt;<span class="fn">CoworkButton</span>
+        <span class="kw">command</span>=<span class="str">"/content-calendar"</span>
+        <span class="kw">theme</span>=<span class="str">"branded-alt"</span>
       /&gt;
     &lt;/&gt;
   );
@@ -617,13 +661,12 @@
 
 <span class="tag">&lt;template&gt;</span>
   <span class="tag">&lt;claude-code-button</span>
-    <span class="kw">command</span>=<span class="str">"/my-skill"</span>
-    <span class="kw">theme</span>=<span class="str">"branded"</span>
+    <span class="kw">command</span>=<span class="str">"Scaffold a Next.js app with auth and database"</span>
     <span class="kw">@cb-copy</span>=<span class="str">"onCopy"</span>
   <span class="tag">/&gt;</span>
   <span class="tag">&lt;cowork-button</span>
-    <span class="kw">command</span>=<span class="str">"/review"</span>
-    <span class="kw">theme</span>=<span class="str">"dark"</span>
+    <span class="kw">command</span>=<span class="str">"/code-review"</span>
+    <span class="kw">variant</span>=<span class="str">"outline"</span>
   <span class="tag">/&gt;</span>
 <span class="tag">&lt;/template&gt;</span></div>
       <div class="code-block" data-tab="svelte"><span class="tag">&lt;script&gt;</span>
@@ -635,49 +678,28 @@
 <span class="tag">&lt;/script&gt;</span>
 
 <span class="tag">&lt;claude-code-button</span>
-  <span class="kw">command</span>=<span class="str">"/my-skill"</span>
-  <span class="kw">theme</span>=<span class="str">"branded"</span>
+  <span class="kw">command</span>=<span class="str">"Scaffold a Next.js app with auth and database"</span>
   <span class="kw">on:cb-copy</span>={<span class="fn">handleCopy</span>}
 <span class="tag">/&gt;</span>
 
+<span class="cmt">&lt;!-- Ghost variant for secondary action --&gt;</span>
 <span class="tag">&lt;cowork-button</span>
-  <span class="kw">command</span>=<span class="str">"/review"</span>
-  <span class="kw">theme</span>=<span class="str">"dark"</span>
+  <span class="kw">command</span>=<span class="str">"/code-review"</span>
+  <span class="kw">variant</span>=<span class="str">"ghost"</span>
 <span class="tag">/&gt;</span></div>
-      <div class="code-block" data-tab="angular"><span class="cmt">// app.module.ts</span>
-<span class="kw">import</span> { <span class="fn">CUSTOM_ELEMENTS_SCHEMA</span> } <span class="kw">from</span> <span class="str">'@angular/core'</span>;
-<span class="kw">import</span> <span class="str">'claudebuttons'</span>;
-
-@<span class="fn">NgModule</span>({
-  <span class="kw">schemas</span>: [<span class="fn">CUSTOM_ELEMENTS_SCHEMA</span>],
-})
-
-<span class="cmt">&lt;!-- component.html --&gt;</span>
-<span class="tag">&lt;claude-code-button</span>
-  <span class="kw">command</span>=<span class="str">"/my-skill"</span>
-  <span class="kw">theme</span>=<span class="str">"branded"</span>
-  <span class="kw">(cb-copy)</span>=<span class="str">"onCopy($event)"</span>
-<span class="tag">&gt;&lt;/claude-code-button&gt;</span>
-
-<span class="tag">&lt;cowork-button</span>
-  <span class="kw">command</span>=<span class="str">"/review"</span>
-  <span class="kw">theme</span>=<span class="str">"dark"</span>
-  <span class="kw">(cb-download)</span>=<span class="str">"onDownload($event)"</span>
-<span class="tag">&gt;&lt;/cowork-button&gt;</span></div>
     </section>
 
   </div>
 
   <footer class="footer">
-    <a href="https://github.com/anthropics">claudebuttons</a> — MIT License
+    <a href="https://github.com/cybertheory/claudebuttons">claudebuttons</a> — MIT License
   </footer>
 
   <script>
-    // ─── Programmatic buttons ───
     const target = document.getElementById('js-target');
 
     const ccBtn = ClaudeButtons.createClaudeCodeButton({
-      command: '/deploy --production',
+      command: 'Set up Docker Compose with PostgreSQL, Redis, and the app service',
       theme: 'branded',
     });
     target.appendChild(ccBtn);
@@ -685,38 +707,29 @@
     const cwBtn = ClaudeButtons.createCoworkButton({
       command: '/code-review',
       theme: 'branded',
+      variant: 'outline',
       skillUrl: 'https://example.com/code-review-skill.zip',
     });
     target.appendChild(cwBtn);
 
-    // ─── Event log ───
     const logBody = document.getElementById('log-body');
     const logClear = document.getElementById('log-clear');
     let hasLogs = false;
 
     function addLog(eventName, detail) {
-      if (!hasLogs) {
-        logBody.innerHTML = '';
-        hasLogs = true;
-      }
-
+      if (!hasLogs) { logBody.innerHTML = ''; hasLogs = true; }
       const now = new Date();
       const time = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
       const entry = document.createElement('div');
       entry.className = 'log-entry';
-
       const detailStr = detail ? JSON.stringify(detail) : '—';
       entry.innerHTML = `<span class="log-time">${time}</span><span class="log-event">${eventName}</span><span class="log-detail">${detailStr}</span>`;
-
       logBody.appendChild(entry);
       logBody.scrollTop = logBody.scrollHeight;
     }
 
     ['cb-copy', 'cb-open', 'cb-close', 'cb-download'].forEach(event => {
-      document.addEventListener(event, (e) => {
-        addLog(event, e.detail);
-      });
+      document.addEventListener(event, (e) => addLog(event, e.detail));
     });
 
     logClear.addEventListener('click', () => {
@@ -724,7 +737,6 @@
       hasLogs = false;
     });
 
-    // ─── Code tabs ───
     document.querySelectorAll('.code-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         const tabName = tab.dataset.tab;

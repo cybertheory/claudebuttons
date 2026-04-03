@@ -1,9 +1,11 @@
-import type { Theme, Size } from './types';
+import type { Theme, Size, Variant, Shape } from './types';
 
 interface ClaudeCodeButtonAttributes {
   command?: string;
   theme?: Theme;
   size?: Size;
+  variant?: Variant;
+  shape?: Shape;
   popup?: string | boolean;
   'prompt-flag'?: string | boolean;
   'popup-title'?: string;
@@ -17,6 +19,8 @@ interface CoworkButtonAttributes {
   'skill-url'?: string;
   theme?: Theme;
   size?: Size;
+  variant?: Variant;
+  shape?: Shape;
   popup?: string | boolean;
   'popup-title'?: string;
   'popup-description'?: string;
