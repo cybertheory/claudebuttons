@@ -1,4 +1,5 @@
 import type { CoworkButtonOptions, Theme, Size, Variant, Shape } from './types';
+import { recordAgentPreference } from './agent-preferences';
 import { COWORK_ICON } from './icons';
 import { resolveTheme, themeToCSS, SIZE_MAP, SHAPE_MAP, BRAND_COLOR, BRAND_COLOR_HOVER, BRAND_COLOR_ACTIVE, BRAND_COLOR_ON_DARK } from './themes';
 import { showPopup } from './popup-dialog';
@@ -428,6 +429,7 @@ export class CoworkButton extends HTMLElement {
     if (popup === false) {
       navigator.clipboard.writeText(command).then(() => {
         this._options.onCopy?.(command);
+        recordAgentPreference('cowork');
         this.dispatchEvent(new CustomEvent('cb-copy', {
           bubbles: true,
           composed: true,
@@ -447,6 +449,7 @@ export class CoworkButton extends HTMLElement {
       autoLaunch: autoLaunch === true,
       onCopy: (cmd) => {
         this._options.onCopy?.(cmd);
+        recordAgentPreference('cowork');
         this.dispatchEvent(new CustomEvent('cb-copy', {
           bubbles: true,
           composed: true,

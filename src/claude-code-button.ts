@@ -1,4 +1,5 @@
 import type { ClaudeCodeButtonOptions, Theme, Size, Variant, Shape } from './types';
+import { recordAgentPreference } from './agent-preferences';
 import { CLAUDE_CODE_ICON } from './icons';
 import { resolveTheme, themeToCSS, SIZE_MAP, SHAPE_MAP, BRAND_COLOR, BRAND_COLOR_HOVER, BRAND_COLOR_ACTIVE, BRAND_COLOR_ON_DARK } from './themes';
 import { showPopup } from './popup-dialog';
@@ -424,6 +425,7 @@ export class ClaudeCodeButton extends HTMLElement {
     if (popup === false) {
       navigator.clipboard.writeText(fullCommand).then(() => {
         this._options.onCopy?.(fullCommand);
+        recordAgentPreference('claude-code');
         this.dispatchEvent(new CustomEvent('cb-copy', {
           bubbles: true,
           composed: true,
@@ -442,6 +444,7 @@ export class ClaudeCodeButton extends HTMLElement {
       fullCommand,
       onCopy: (cmd) => {
         this._options.onCopy?.(cmd);
+        recordAgentPreference('claude-code');
         this.dispatchEvent(new CustomEvent('cb-copy', {
           bubbles: true,
           composed: true,
