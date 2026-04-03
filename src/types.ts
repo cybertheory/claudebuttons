@@ -59,6 +59,8 @@ export interface PopupOptions {
   command: string;
   fullCommand?: string;
   skillUrl?: string;
+  /** Custom URL to open Claude Desktop from the Cowork popup. Default: `claude://` */
+  desktopLaunchUrl?: string;
   onCopy?: (command: string) => void;
   onClose?: () => void;
 }

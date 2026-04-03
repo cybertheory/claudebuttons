@@ -1,5 +1,13 @@
 import type { PopupOptions, ThemeTokens } from './types';
-import { CLAUDE_CODE_ICON, COWORK_ICON, COPY_ICON, CHECK_ICON, CLOSE_ICON } from './icons';
+import {
+  CLAUDE_CODE_ICON,
+  COWORK_ICON,
+  COPY_ICON,
+  CHECK_ICON,
+  CLOSE_ICON,
+  TERMINAL_LAUNCH_ICON,
+  DESKTOP_APP_ICON,
+} from './icons';
 import { resolveTheme, themeToCSS, BRAND_COLOR, BRAND_COLOR_HOVER } from './themes';
 
 const POPUP_STYLES = `
