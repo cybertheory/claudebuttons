@@ -11,7 +11,7 @@ export { CoworkButton, createCoworkButton, registerCoworkButton } from './cowork
 export { ClaudePopupDialog, showPopup } from './popup-dialog';
 
 export { CLAUDE_CODE_ICON, COWORK_ICON } from './icons';
-export { themes, resolveTheme, BRAND_COLOR, ALT_BRAND_COLOR } from './themes';
+export { themes, resolveTheme, BRAND_COLOR, BRAND_COLOR_ON_DARK, ALT_BRAND_COLOR } from './themes';
 
 export type { ButtonMetadata } from './structured-data';
 export { discoverButtons, generateStructuredData, injectStructuredData } from './structured-data';

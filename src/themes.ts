@@ -3,6 +3,8 @@ import type { ThemeTokens, Theme } from './types';
 export const BRAND_COLOR = '#D4795C';
 export const BRAND_COLOR_HOVER = '#C06A4E';
 export const BRAND_COLOR_ACTIVE = '#B35E43';
+/** Slightly lighter for ghost/outline text on dark page backgrounds */
+export const BRAND_COLOR_ON_DARK = '#F0B8A8';
 
 export const themes: Record<Exclude<Theme, 'system'>, ThemeTokens> = {
   branded: {

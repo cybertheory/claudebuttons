@@ -1,6 +1,6 @@
 import type { ClaudeCodeButtonOptions, Theme, Size, Variant, Shape } from './types';
 import { CLAUDE_CODE_ICON } from './icons';
-import { resolveTheme, themeToCSS, SIZE_MAP, SHAPE_MAP, BRAND_COLOR, BRAND_COLOR_HOVER, BRAND_COLOR_ACTIVE } from './themes';
+import { resolveTheme, themeToCSS, SIZE_MAP, SHAPE_MAP, BRAND_COLOR, BRAND_COLOR_HOVER, BRAND_COLOR_ACTIVE, BRAND_COLOR_ON_DARK } from './themes';
 import { showPopup } from './popup-dialog';
 
 const BUTTON_STYLES = `
@@ -155,7 +155,7 @@ const BUTTON_STYLES = `
   }
 
   :host([data-variant="ghost"][data-theme="branded"]) .cb-btn {
-    color: ${BRAND_COLOR};
+    color: ${BRAND_COLOR_ON_DARK};
   }
   :host([data-variant="ghost"][data-theme="branded"]) .cb-btn:hover {
     background: rgba(212, 121, 92, 0.1);
