@@ -46,6 +46,7 @@
   ],
   "author": "",
   "license": "MIT",
+  "homepage": "https://claudebuttons.vercel.app/",
   "devDependencies": {
     "@types/react": "^19.2.14",
     "tsup": "^8.4.0",

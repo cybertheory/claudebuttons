@@ -3,6 +3,16 @@
 Drop-in **"Run on Claude Code"** and **"Run on Cowork"** buttons for any website or framework. Built as framework-agnostic Web Components with zero dependencies.
 
 <p align="center">
+  <a href="https://claudebuttons.vercel.app/" title="Open interactive demo">
+    <img src="https://img.shields.io/static/v1?style=for-the-badge&label=Run+on&message=Claude+Code&color=d4795c&labelColor=d4795c" alt="Try Run on Claude Code — live demo">
+  </a>
+  &nbsp;
+  <a href="https://claudebuttons.vercel.app/" title="Open interactive demo">
+    <img src="https://img.shields.io/static/v1?style=for-the-badge&label=Run+on&message=Cowork&color=d4795c&labelColor=ffffff" alt="Try Run on Cowork — live demo">
+  </a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/npm/v/claudebuttons?color=%23D4795C&label=npm" alt="npm version">
   <img src="https://img.shields.io/bundlephobia/minzip/claudebuttons?color=%23D4795C" alt="bundle size">
   <img src="https://img.shields.io/npm/l/claudebuttons?color=%23D4795C" alt="license">
