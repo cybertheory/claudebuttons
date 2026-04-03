@@ -10,7 +10,6 @@ interface ClaudeCodeButtonAttributes {
   'prompt-flag'?: string | boolean;
   'popup-title'?: string;
   'popup-description'?: string;
-  'auto-launch'?: string | boolean;
   class?: string;
   style?: string | Record<string, string>;
 }

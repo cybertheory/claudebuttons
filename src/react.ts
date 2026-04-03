@@ -43,7 +43,6 @@ export const ClaudeCodeButton: FC<ClaudeCodeButtonProps> = ({
   shape = 'rounded',
   popup = true,
   promptFlag = true,
-  autoLaunch,
   onCopy,
   popupTitle,
   popupDescription,
@@ -102,12 +101,11 @@ export const ClaudeCodeButton: FC<ClaudeCodeButtonProps> = ({
       shape,
       popup,
       promptFlag,
-      autoLaunch,
       onCopy,
       popupTitle,
       popupDescription,
     };
-  }, [command, theme, size, variant, shape, popup, promptFlag, autoLaunch, onCopy, popupTitle, popupDescription]);
+  }, [command, theme, size, variant, shape, popup, promptFlag, onCopy, popupTitle, popupDescription]);
 
   return createElement('div', {
     ref: containerRef,

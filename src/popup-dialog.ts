@@ -5,14 +5,10 @@ import {
   COPY_ICON,
   CHECK_ICON,
   CLOSE_ICON,
-  TERMINAL_LAUNCH_ICON,
   DESKTOP_APP_ICON,
 } from './icons';
 import { resolveTheme, themeToCSS, BRAND_COLOR, BRAND_COLOR_HOVER } from './themes';
-import {
-  isDesktopAppLinkSupported,
-  isTerminalLaunchSupported,
-} from './launch-capabilities';
+import { isDesktopAppLinkSupported } from './launch-capabilities';
 
 const POPUP_STYLES = `
   :host {
@@ -299,27 +295,6 @@ const POPUP_STYLES = `
     outline-offset: 2px;
   }
 
-  .cb-launch-btn--terminal {
-    color: var(--cb-code-text);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--cb-code-text) 8%, var(--cb-code-bg)) 0%, var(--cb-code-bg) 100%);
-    border: 1px solid color-mix(in srgb, var(--cb-code-text) 22%, var(--cb-code-bg));
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, black 25%, transparent) inset,
-      0 6px 20px -8px rgba(0, 0, 0, 0.45);
-  }
-
-  .cb-launch-btn--terminal:hover:not(:disabled) {
-    border-color: color-mix(in srgb, #34d399 55%, var(--cb-code-bg));
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, #34d399 20%, transparent) inset,
-      0 8px 28px -8px color-mix(in srgb, #34d399 28%, transparent);
-  }
-
-  .cb-launch-btn--terminal:focus-visible {
-    outline: 2px solid #34d399;
-    outline-offset: 2px;
-  }
-
   .cb-launch-btn:disabled {
     opacity: 0.55;
     cursor: not-allowed;
@@ -328,12 +303,6 @@ const POPUP_STYLES = `
   }
 
   .cb-launch-btn--desktop:disabled {
-    background: var(--cb-border);
-    border-color: var(--cb-border);
-    color: var(--cb-muted);
-  }
-
-  .cb-launch-btn--terminal:disabled {
     background: var(--cb-border);
     border-color: var(--cb-border);
     color: var(--cb-muted);
@@ -460,7 +429,6 @@ export class ClaudePopupDialog extends HTMLElement {
     const displayCommand = fullCommand || command;
     const desktopHref = desktopLaunchUrl ?? 'claude://';
     const desktopLaunchOk = isDesktopAppLinkSupported();
-    const terminalLaunchOk = isTerminalLaunchSupported();
 
     this.shadowRoot.innerHTML = `
       <style>${POPUP_STYLES}</style>
@@ -480,7 +448,7 @@ export class ClaudePopupDialog extends HTMLElement {
           </div>
           <div class="cb-dialog-footer">
             ${isClaudeCode
-              ? this.renderClaudeCodeFooter(displayCommand, terminalLaunchOk)
+              ? this.renderClaudeCodeFooter()
               : this.renderCoworkFooter(this.escapeHref(desktopHref), desktopLaunchOk)}
           </div>
         </div>
@@ -490,14 +458,9 @@ export class ClaudePopupDialog extends HTMLElement {
     this.setupListeners();
     this.setupSystemThemeWatch();
 
-    if (autoLaunch && !this._autoLaunchConsumed) {
+    if (autoLaunch && !this._autoLaunchConsumed && variant === 'cowork' && desktopLaunchOk) {
       this._autoLaunchConsumed = true;
-      if (variant === 'cowork' && desktopLaunchOk) {
-        this.openDesktopAppLink(desktopHref);
-      } else if (variant === 'claude-code' && terminalLaunchOk) {
-        const termBtn = this.shadowRoot?.querySelector('[data-action="launch-terminal"]') as HTMLElement | null;
-        if (termBtn) void this.launchTerminal(termBtn, displayCommand);
-      }
+      this.openDesktopAppLink(desktopHref);
     }
   }
 
@@ -623,85 +586,10 @@ export class ClaudePopupDialog extends HTMLElement {
     `;
   }
 
-  private renderClaudeCodeFooter(displayCommand: string, enabled: boolean): string {
-    const disabledTitle = 'Available on desktop in a normal browser with clipboard access. Use Copy above, then paste into your terminal.';
-    const sub = this.getTerminalLaunchSubcopy(enabled);
-
-    const control = enabled
-      ? `
-      <button
-        type="button"
-        class="cb-launch-btn cb-launch-btn--terminal"
-        data-action="launch-terminal"
-        data-command="${this.escapeAttr(displayCommand)}"
-        aria-label="Copy command and open a terminal app"
-      >
-        ${TERMINAL_LAUNCH_ICON}
-        <span>Open Terminal</span>
-      </button>`
-      : `
-      <button
-        type="button"
-        class="cb-launch-btn cb-launch-btn--terminal"
-        disabled
-        aria-disabled="true"
-        aria-label="Open Terminal (unavailable in this environment)"
-        title="${this.escapeAttr(disabledTitle)}"
-      >
-        ${TERMINAL_LAUNCH_ICON}
-        <span>Open Terminal</span>
-      </button>`;
-
+  private renderClaudeCodeFooter(): string {
     return `
-      ${control}
-      <span class="cb-launch-sub">${this.escapeHtml(sub)}</span>
       <div class="cb-hint">Press <kbd>⌘</kbd>+<kbd>V</kbd> or <kbd>Ctrl</kbd>+<kbd>V</kbd> in your terminal to run</div>
     `;
-  }
-
-  private static isDesktopMac(): boolean {
-    if (typeof navigator === 'undefined') return false;
-    const p = navigator.platform || '';
-    const ua = navigator.userAgent || '';
-    const isIOS = /iPhone|iPad|iPod/i.test(ua);
-    if (isIOS) return false;
-    return /Mac/.test(p) || /Mac OS X/.test(ua);
-  }
-
-  private getTerminalLaunchSubcopy(enabled: boolean): string {
-    if (!enabled) {
-      return 'Use the Copy button above, then paste into Terminal, PowerShell, or your preferred shell on a desktop computer.';
-    }
-    if (typeof navigator === 'undefined') {
-      return 'Copies the command to your clipboard first.';
-    }
-    const ua = navigator.userAgent || '';
-    if (/iPhone|iPad|iPod|Android/i.test(ua)) {
-      return 'Copies the command to your clipboard. Open a terminal or SSH client on your device to run it.';
-    }
-    if (ClaudePopupDialog.isDesktopMac()) {
-      return 'Copies the command, then tries to open iTerm if you have it—otherwise open Terminal and paste.';
-    }
-    return 'Copies the command, then tries to open VS Code if installed—paste into its terminal, or use any shell.';
-  }
-
-  private getTerminalProtocolUrl(): string | null {
-    if (typeof navigator === 'undefined') return null;
-    const ua = navigator.userAgent || '';
-    if (/iPhone|iPad|iPod|Android/i.test(ua)) return null;
-    if (ClaudePopupDialog.isDesktopMac()) return 'iterm2://';
-    return 'vscode://';
-  }
-
-  private tryOpenCustomProtocol(url: string) {
-    if (typeof document === 'undefined') return;
-    const iframe = document.createElement('iframe');
-    iframe.style.cssText = 'position:fixed;width:0;height:0;border:none;opacity:0;pointer-events:none';
-    iframe.setAttribute('tabindex', '-1');
-    iframe.setAttribute('aria-hidden', 'true');
-    iframe.src = url;
-    document.body.appendChild(iframe);
-    window.setTimeout(() => iframe.remove(), 1200);
   }
 
   private escapeHref(str: string): string {
@@ -731,9 +619,6 @@ export class ClaudePopupDialog extends HTMLElement {
         e.preventDefault();
         const raw = (target as HTMLAnchorElement).getAttribute('href') || '';
         this.openDesktopAppLink(raw || (target as HTMLAnchorElement).href);
-      } else if (action === 'launch-terminal') {
-        const cmd = target.dataset.command || '';
-        void this.launchTerminal(target, cmd);
       }
     });
 
@@ -754,54 +639,6 @@ export class ClaudePopupDialog extends HTMLElement {
     const handler = () => this.render();
     mq.addEventListener('change', handler);
     this._mqCleanup = () => mq.removeEventListener('change', handler);
-  }
-
-  private async launchTerminal(button: HTMLElement, fullCommand: string) {
-    const label = button.querySelector('span');
-
-    try {
-      await navigator.clipboard.writeText(fullCommand);
-      this._options.onCopy?.(fullCommand);
-
-      const proto = this.getTerminalProtocolUrl();
-      if (proto) this.tryOpenCustomProtocol(proto);
-
-      if (label) label.textContent = 'Copied!';
-
-      this.dispatchEvent(new CustomEvent('cb-launch-terminal', {
-        bubbles: true,
-        composed: true,
-        detail: { command: fullCommand },
-      }));
-
-      window.setTimeout(() => {
-        if (label) label.textContent = 'Open Terminal';
-      }, 2000);
-    } catch {
-      const textarea = document.createElement('textarea');
-      textarea.value = fullCommand;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-
-      this._options.onCopy?.(fullCommand);
-      const proto = this.getTerminalProtocolUrl();
-      if (proto) this.tryOpenCustomProtocol(proto);
-
-      if (label) label.textContent = 'Copied!';
-      this.dispatchEvent(new CustomEvent('cb-launch-terminal', {
-        bubbles: true,
-        composed: true,
-        detail: { command: fullCommand },
-      }));
-
-      window.setTimeout(() => {
-        if (label) label.textContent = 'Open Terminal';
-      }, 2000);
-    }
   }
 
   private async copyToClipboard(command: string, button: HTMLElement) {

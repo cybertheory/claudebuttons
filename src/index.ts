@@ -2,11 +2,8 @@ export type { Theme, Size, Variant, Shape, ClaudeCodeButtonOptions, CoworkButton
 
 export {
   isDesktopAppLinkSupported,
-  isTerminalLaunchSupported,
   isRestrictedEmbeddedBrowser,
   isMobileOrTabletDevice,
-  isDesktopComputerOs,
-  canUseClipboardWithGesture,
 } from './launch-capabilities';
 
 export { ClaudeCodeButton, createClaudeCodeButton, registerClaudeCodeButton } from './claude-code-button';
