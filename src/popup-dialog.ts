@@ -1,4 +1,4 @@
-import type { PopupOptions, Theme } from './types';
+import type { PopupOptions, ThemeTokens } from './types';
 import { CLAUDE_CODE_ICON, COWORK_ICON, COPY_ICON, CHECK_ICON, CLOSE_ICON } from './icons';
 import { resolveTheme, themeToCSS, BRAND_COLOR, BRAND_COLOR_HOVER } from './themes';
 
@@ -283,6 +283,7 @@ const POPUP_STYLES = `
 
 export class ClaudePopupDialog extends HTMLElement {
   private _options!: PopupOptions;
+  private _mqCleanup: (() => void) | null = null;
 
   constructor() {
     super();
@@ -298,11 +299,37 @@ export class ClaudePopupDialog extends HTMLElement {
     return this._options;
   }
 
+  disconnectedCallback() {
+    this._mqCleanup?.();
+    this._mqCleanup = null;
+  }
+
+  private resolvePopupTokens(): ThemeTokens {
+    const { theme } = this._options;
+
+    if (theme === 'dark' || theme === 'light') return resolveTheme(theme);
+
+    const prefersDark = typeof window !== 'undefined'
+      && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (theme === 'system') {
+      return prefersDark ? resolveTheme('dark') : resolveTheme('light');
+    }
+
+    const base = prefersDark ? resolveTheme('dark') : resolveTheme('light');
+    const brand = resolveTheme(theme);
+    return {
+      ...base,
+      primary: brand.primary,
+      primaryText: brand.primaryText,
+    };
+  }
+
   private render() {
     if (!this.shadowRoot || !this._options) return;
 
-    const { variant, theme, title, description, command, fullCommand, skillUrl } = this._options;
-    const tokens = resolveTheme(theme);
+    const { variant, title, description, command, fullCommand, skillUrl } = this._options;
+    const tokens = this.resolvePopupTokens();
     const icon = variant === 'claude-code' ? CLAUDE_CODE_ICON : COWORK_ICON;
 
     const isClaudeCode = variant === 'claude-code';
@@ -430,17 +457,17 @@ export class ClaudePopupDialog extends HTMLElement {
   }
 
   private setupSystemThemeWatch() {
-    if (this._options.theme !== 'system' || typeof window === 'undefined') return;
+    this._mqCleanup?.();
+    this._mqCleanup = null;
+
+    const theme = this._options.theme;
+    const needsWatch = theme === 'system' || theme === 'branded' || theme === 'branded-alt';
+    if (!needsWatch || typeof window === 'undefined') return;
 
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     const handler = () => this.render();
     mq.addEventListener('change', handler);
-
-    const cleanup = () => {
-      mq.removeEventListener('change', handler);
-      this.removeEventListener('disconnected', cleanup);
-    };
-    this.addEventListener('disconnected', cleanup);
+    this._mqCleanup = () => mq.removeEventListener('change', handler);
   }
 
   private async copyToClipboard(command: string, button: HTMLElement) {

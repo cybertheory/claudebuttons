@@ -1,6 +1,6 @@
 {
   "name": "claudebuttons",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Drop-in \"Run on Claude Code\" and \"Run on Cowork\" buttons for any website or framework",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
