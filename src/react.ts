@@ -24,7 +24,6 @@ export interface CoworkButtonProps extends CoworkButtonOptions {
   className?: string;
   style?: React.CSSProperties;
   onCbCopy?: (e: CustomEvent<{ command: string }>) => void;
-  onCbDownload?: (e: CustomEvent<{ url: string }>) => void;
   onCbOpen?: (e: CustomEvent<{ command: string }>) => void;
   onCbClose?: (e: CustomEvent) => void;
 }
@@ -117,7 +116,6 @@ export const ClaudeCodeButton: FC<ClaudeCodeButtonProps> = ({
 
 export const CoworkButton: FC<CoworkButtonProps> = ({
   command,
-  skillUrl,
   theme = 'branded',
   size = 'md',
   variant = 'filled',
@@ -125,13 +123,11 @@ export const CoworkButton: FC<CoworkButtonProps> = ({
   popup = true,
   autoLaunch,
   onCopy,
-  onDownload,
   popupTitle,
   popupDescription,
   className,
   style,
   onCbCopy,
-  onCbDownload,
   onCbOpen,
   onCbClose,
 }) => {
@@ -140,8 +136,6 @@ export const CoworkButton: FC<CoworkButtonProps> = ({
 
   const cbCopyRef = useRef(onCbCopy);
   cbCopyRef.current = onCbCopy;
-  const cbDownloadRef = useRef(onCbDownload);
-  cbDownloadRef.current = onCbDownload;
   const cbOpenRef = useRef(onCbOpen);
   cbOpenRef.current = onCbOpen;
   const cbCloseRef = useRef(onCbClose);
@@ -157,7 +151,6 @@ export const CoworkButton: FC<CoworkButtonProps> = ({
       elRef.current = el;
 
       el.addEventListener('cb-copy', ((e: Event) => cbCopyRef.current?.(e as CustomEvent)) as EventListener);
-      el.addEventListener('cb-download', ((e: Event) => cbDownloadRef.current?.(e as CustomEvent)) as EventListener);
       el.addEventListener('cb-open', ((e: Event) => cbOpenRef.current?.(e as CustomEvent)) as EventListener);
       el.addEventListener('cb-close', ((e: Event) => cbCloseRef.current?.(e as CustomEvent)) as EventListener);
 
@@ -180,7 +173,6 @@ export const CoworkButton: FC<CoworkButtonProps> = ({
 
     (el as any).options = {
       command,
-      skillUrl,
       theme,
       size,
       variant,
@@ -188,11 +180,10 @@ export const CoworkButton: FC<CoworkButtonProps> = ({
       popup,
       autoLaunch,
       onCopy,
-      onDownload,
       popupTitle,
       popupDescription,
     };
-  }, [command, skillUrl, theme, size, variant, shape, popup, autoLaunch, onCopy, onDownload, popupTitle, popupDescription]);
+  }, [command, theme, size, variant, shape, popup, autoLaunch, onCopy, popupTitle, popupDescription]);
 
   return createElement('div', {
     ref: containerRef,

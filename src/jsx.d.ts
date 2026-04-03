@@ -16,7 +16,6 @@ interface ClaudeCodeButtonAttributes {
 
 interface CoworkButtonAttributes {
   command?: string;
-  'skill-url'?: string;
   theme?: Theme;
   size?: Size;
   variant?: Variant;

@@ -9,7 +9,6 @@ export interface ButtonMetadata {
   platform: 'claude-code' | 'cowork';
   command: string;
   fullCommand?: string;
-  skillUrl?: string;
 }
 
 export function discoverButtons(): ButtonMetadata[] {
@@ -32,12 +31,10 @@ export function discoverButtons(): ButtonMetadata[] {
 
   document.querySelectorAll('cowork-button').forEach((el) => {
     const command = el.getAttribute('command') || '';
-    const skillUrl = el.getAttribute('skill-url') || undefined;
 
     results.push({
       platform: 'cowork',
       command,
-      ...(skillUrl && { skillUrl }),
     });
   });
 
@@ -70,31 +67,15 @@ export function generateStructuredData(): object {
     const entry: Record<string, unknown> = {
       '@type': 'EntryPoint',
       actionPlatform: 'https://claude.ai/cowork',
+      urlTemplate: `https://claude.ai/cowork?command=${encodeURIComponent(btn.command)}`,
     };
-    if (btn.skillUrl) {
-      entry.urlTemplate = btn.skillUrl;
-    } else {
-      entry.urlTemplate = `https://claude.ai/cowork?command=${encodeURIComponent(btn.command)}`;
-    }
 
-    const action: Record<string, unknown> = {
+    return {
       '@type': 'Action',
       name: `Run on Cowork: ${btn.command}`,
       description: btn.command,
       target: entry,
     };
-
-    if (btn.skillUrl) {
-      action.object = {
-        '@type': 'SoftwareApplication',
-        name: btn.command,
-        downloadUrl: btn.skillUrl,
-        applicationCategory: 'AI Skill',
-        operatingSystem: 'Claude Cowork',
-      };
-    }
-
-    return action;
   });
 
   return {

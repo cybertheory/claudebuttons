@@ -421,7 +421,7 @@ export class ClaudePopupDialog extends HTMLElement {
   private render() {
     if (!this.shadowRoot || !this._options) return;
 
-    const { variant, title, description, command, fullCommand, skillUrl, desktopLaunchUrl, autoLaunch } = this._options;
+    const { variant, title, description, command, fullCommand, desktopLaunchUrl, autoLaunch } = this._options;
     const tokens = this.resolvePopupTokens();
     const icon = variant === 'claude-code' ? CLAUDE_CODE_ICON : COWORK_ICON;
 
@@ -444,7 +444,7 @@ export class ClaudePopupDialog extends HTMLElement {
             <button class="cb-dialog-close" data-action="close" aria-label="Close">${CLOSE_ICON}</button>
           </div>
           <div class="cb-dialog-body">
-            ${isClaudeCode ? this.renderClaudeCodeBody(displayCommand) : this.renderCoworkBody(command, skillUrl)}
+            ${isClaudeCode ? this.renderClaudeCodeBody(displayCommand) : this.renderCoworkBody(command)}
           </div>
           <div class="cb-dialog-footer">
             ${isClaudeCode
@@ -502,51 +502,25 @@ export class ClaudePopupDialog extends HTMLElement {
     `;
   }
 
-  private renderCoworkBody(command: string, skillUrl?: string): string {
-    let steps = '';
-
-    if (skillUrl) {
-      const fullPrompt = `Install the skill from ${skillUrl} and run ${command}`;
-      steps += `
-        <div class="cb-step">
-          <div class="cb-step-num">1</div>
-          <div class="cb-step-content">
-            <div class="cb-step-label">Copy this prompt to your clipboard</div>
-            <div class="cb-code-block">
-              <div class="cb-code-text">${this.escapeHtml(fullPrompt)}</div>
-              <button class="cb-copy-btn" data-action="copy" data-command="${this.escapeAttr(fullPrompt)}">${COPY_ICON}<span>Copy</span></button>
-            </div>
+  private renderCoworkBody(command: string): string {
+    return `
+      <div class="cb-step">
+        <div class="cb-step-num">1</div>
+        <div class="cb-step-content">
+          <div class="cb-step-label">Copy this command to your clipboard</div>
+          <div class="cb-code-block">
+            <div class="cb-code-text">${this.escapeHtml(command)}</div>
+            <button class="cb-copy-btn" data-action="copy" data-command="${this.escapeAttr(command)}">${COPY_ICON}<span>Copy</span></button>
           </div>
         </div>
-        <div class="cb-step">
-          <div class="cb-step-num">2</div>
-          <div class="cb-step-content">
-            <div class="cb-step-label">Paste into a Cowork session — Claude will fetch the skill and set it up for you</div>
-          </div>
+      </div>
+      <div class="cb-step">
+        <div class="cb-step-num">2</div>
+        <div class="cb-step-content">
+          <div class="cb-step-label">Paste and send in your Cowork session</div>
         </div>
-      `;
-    } else {
-      steps += `
-        <div class="cb-step">
-          <div class="cb-step-num">1</div>
-          <div class="cb-step-content">
-            <div class="cb-step-label">Copy this command to your clipboard</div>
-            <div class="cb-code-block">
-              <div class="cb-code-text">${this.escapeHtml(command)}</div>
-              <button class="cb-copy-btn" data-action="copy" data-command="${this.escapeAttr(command)}">${COPY_ICON}<span>Copy</span></button>
-            </div>
-          </div>
-        </div>
-        <div class="cb-step">
-          <div class="cb-step-num">2</div>
-          <div class="cb-step-content">
-            <div class="cb-step-label">Paste and send in your Cowork session</div>
-          </div>
-        </div>
-      `;
-    }
-
-    return steps;
+      </div>
+    `;
   }
 
   private renderCoworkFooter(desktopHrefEscaped: string, enabled: boolean): string {

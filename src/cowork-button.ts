@@ -246,7 +246,7 @@ const BUTTON_STYLES = `
 `;
 
 export class CoworkButton extends HTMLElement {
-  static observedAttributes = ['command', 'skill-url', 'theme', 'size', 'variant', 'shape', 'popup', 'popup-title', 'popup-description', 'auto-launch'];
+  static observedAttributes = ['command', 'theme', 'size', 'variant', 'shape', 'popup', 'popup-title', 'popup-description', 'auto-launch'];
 
   private _options: CoworkButtonOptions = {
     command: '',
@@ -294,7 +294,6 @@ export class CoworkButton extends HTMLElement {
 
   private syncFromAttributes() {
     const command = this.getAttribute('command');
-    const skillUrl = this.getAttribute('skill-url');
     const theme = this.getAttribute('theme') as Theme | null;
     const size = this.getAttribute('size') as Size | null;
     const variant = this.getAttribute('variant') as Variant | null;
@@ -305,7 +304,6 @@ export class CoworkButton extends HTMLElement {
     const autoLaunch = this.getAttribute('auto-launch');
 
     if (command !== null) this._options.command = command;
-    if (skillUrl !== null) this._options.skillUrl = skillUrl;
     if (theme) this._options.theme = theme;
     if (size) this._options.size = size;
     if (variant) this._options.variant = variant;
@@ -321,7 +319,7 @@ export class CoworkButton extends HTMLElement {
   }
 
   private updateLightDOM() {
-    const { command, skillUrl } = this._options;
+    const { command } = this._options;
 
     this.setAttribute('role', 'button');
     this.setAttribute('tabindex', '0');
@@ -343,13 +341,7 @@ export class CoworkButton extends HTMLElement {
     link.textContent = `Run on Cowork: ${command}`;
     link.setAttribute('data-platform', 'cowork');
     link.setAttribute('data-command', command);
-    if (skillUrl) {
-      link.href = skillUrl;
-      link.setAttribute('data-skill-url', skillUrl);
-    } else {
-      link.href = `https://claude.ai/cowork?command=${encodeURIComponent(command)}`;
-      link.removeAttribute('data-skill-url');
-    }
+    link.href = `https://claude.ai/cowork?command=${encodeURIComponent(command)}`;
   }
 
   private getResolvedTheme(): Theme {
@@ -418,7 +410,7 @@ export class CoworkButton extends HTMLElement {
   }
 
   private handleClick() {
-    const { popup, command, skillUrl, popupTitle, popupDescription, autoLaunch } = this._options;
+    const { popup, command, popupTitle, popupDescription, autoLaunch } = this._options;
 
     this.dispatchEvent(new CustomEvent('cb-open', {
       bubbles: true,
@@ -445,7 +437,6 @@ export class CoworkButton extends HTMLElement {
       title: popupTitle || 'Run on Cowork',
       description: popupDescription || 'Copy and paste into a Cowork session to get started.',
       command,
-      skillUrl,
       autoLaunch: autoLaunch === true,
       onCopy: (cmd) => {
         this._options.onCopy?.(cmd);

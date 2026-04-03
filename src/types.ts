@@ -29,8 +29,6 @@ export interface ClaudeCodeButtonOptions {
 export interface CoworkButtonOptions {
   /** The slash command to run in Cowork (e.g. "/my-skill") */
   command: string;
-  /** URL to a downloadable skill package (.zip, SKILL.md, or plugin.json) */
-  skillUrl?: string;
   /** Theme variant. Default: 'branded' */
   theme?: Theme;
   /** Button size. Default: 'md' */
@@ -43,8 +41,6 @@ export interface CoworkButtonOptions {
   popup?: boolean;
   /** Callback fired after the command is copied */
   onCopy?: (command: string) => void;
-  /** Callback fired when the skill package is downloaded */
-  onDownload?: (url: string) => void;
   /** Custom popup title */
   popupTitle?: string;
   /** Custom popup description */
@@ -63,7 +59,6 @@ export interface PopupOptions {
   description?: string;
   command: string;
   fullCommand?: string;
-  skillUrl?: string;
   /** Custom URL to open Claude Desktop from the Cowork popup. Default: `claude://` */
   desktopLaunchUrl?: string;
   /**
