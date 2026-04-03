@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>claudebuttons — Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --terra: #D4795C;
+      --terra-glow: rgba(212, 121, 92, 0.15);
+      --dark-1: #0C0A09;
+      --dark-2: #1C1917;
+      --dark-3: #292524;
+      --dark-border: #3D3530;
+      --light-1: #FAFAF9;
+      --light-border: #E7E5E4;
+      --muted: #A8A29E;
+      --muted-2: #78716C;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--dark-1);
+      color: #F5F0EB;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 72px 24px 56px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, var(--terra-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      background: rgba(212, 121, 92, 0.1);
+      border: 1px solid rgba(212, 121, 92, 0.2);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--terra);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero-pill .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--terra);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .hero h1 .accent { color: var(--terra); }
+
+    .hero .subtitle {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    /* ─── CONTAINER ─── */
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 24px 96px;
+    }
+
+    /* ─── SECTION ─── */
+    .section {
+      margin-top: 64px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .section-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--terra);
+      background: var(--terra-glow);
+      padding: 3px 10px;
+      border-radius: 4px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    /* ─── GRID ─── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--dark-2);
+      border: 1px solid var(--dark-border);
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .card--light {
+      background: var(--light-1);
+      border-color: var(--light-border);
+    }
+
+    .card-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+
+    .card--light .card-label { color: var(--muted-2); }
+
+    .card-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-row + .card-row {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--dark-border);
+    }
+
+    .card--light .card-row + .card-row {
+      border-top-color: var(--light-border);
+    }
+
+    .size-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      min-width: 28px;
+    }
+
+    .card--light .size-label { color: var(--muted-2); }
+
+    /* ─── LOG PANEL ─── */
+    .log-section {
+      margin-top: 64px;
+    }
+
+    .log-panel {
+      background: var(--dark-2);
+      border: 1px solid var(--dark-border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .log-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--dark-border);
+    }
+
+    .log-header-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .log-header-title .dot-green {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .log-clear {
+      padding: 4px 12px;
+      background: transparent;
+      border: 1px solid var(--dark-border);
+      color: var(--muted);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .log-clear:hover {
+      border-color: var(--muted);
+      color: #F5F0EB;
+    }
+
+    .log-body {
+      padding: 16px 20px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      scrollbar-width: thin;
+      scrollbar-color: var(--dark-border) transparent;
+    }
+
+    .log-empty {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .log-entry {
+      display: flex;
+      gap: 10px;
+    }
+
+    .log-time {
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .log-event {
+      color: var(--terra);
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .log-detail {
+      color: #F5F0EB;
+      word-break: break-all;
+    }
+
+    /* ─── CODE EXAMPLE ─── */
+    .code-section {
+      margin-top: 64px;
+    }
+
+    .code-tabs {
+      display: flex;
+      gap: 2px;
+      margin-bottom: -1px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .code-tab {
+      padding: 10px 18px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-bottom: none;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      cursor: pointer;
+      border-radius: 8px 8px 0 0;
+      transition: all 0.15s;
+    }
+
+    .code-tab[data-active="true"] {
+      background: var(--dark-2);
+      border-color: var(--dark-border);
+      color: #F5F0EB;
+    }
+
+    .code-tab:hover:not([data-active="true"]) {
+      color: #F5F0EB;
+    }
+
+    .code-block {
+      background: var(--dark-2);
+      border: 1px solid var(--dark-border);
+      border-radius: 0 14px 14px 14px;
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+      color: #F5F0EB;
+      display: none;
+    }
+
+    .code-block[data-active="true"] { display: block; }
+
+    .code-block .kw { color: var(--terra); }
+    .code-block .str { color: #A8A29E; }
+    .code-block .cmt { color: #57534E; }
+    .code-block .tag { color: #78716C; }
+    .code-block .fn { color: #FCD34D; }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--dark-border);
+    }
+
+    .footer a {
+      color: var(--terra);
+      text-decoration: none;
+    }
+
+    .footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <script src="../dist/index.global.js"></script>
+
+  <!-- ═══ HERO ═══ -->
+  <header class="hero">
+    <div class="hero-pill"><span class="dot"></span> v1.0.0</div>
+    <h1><span class="accent">claude</span>buttons</h1>
+    <p class="subtitle">
+      Drop-in "Run on Claude Code" and "Run on Cowork" buttons for any website.
+      Framework-agnostic Web Components.
+    </p>
+    <div class="hero-buttons">
+      <claude-code-button command="/hello-world" theme="branded" size="lg"></claude-code-button>
+      <cowork-button command="/hello-world" theme="branded" size="lg"></cowork-button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- ═══ BRANDED ═══ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">Theme</span>
+        <h2 class="section-title">Branded</h2>
+      </div>
+      <p class="section-desc">The default theme — terracotta background matching Claude's brand palette.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="card-label">Claude Code</div>
+          <div class="card-row">
+            <span class="size-label">sm</span>
+            <claude-code-button command="/frontend-design --theme dark" theme="branded" size="sm"></claude-code-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">md</span>
+            <claude-code-button command="/frontend-design --theme dark" theme="branded" size="md"></claude-code-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">lg</span>
+            <claude-code-button command="/frontend-design --theme dark" theme="branded" size="lg"></claude-code-button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Cowork</div>
+          <div class="card-row">
+            <span class="size-label">sm</span>
+            <cowork-button command="/my-skill" theme="branded" size="sm"></cowork-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">md</span>
+            <cowork-button command="/my-skill" theme="branded" size="md"></cowork-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">lg</span>
+            <cowork-button command="/my-skill" skill-url="https://example.com/skill.zip" theme="branded" size="lg"></cowork-button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ DARK ═══ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">Theme</span>
+        <h2 class="section-title">Dark</h2>
+      </div>
+      <p class="section-desc">For dark UIs — dark surface with terracotta accents.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="card-label">Claude Code</div>
+          <div class="card-row">
+            <span class="size-label">sm</span>
+            <claude-code-button command="/deploy --prod" theme="dark" size="sm"></claude-code-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">md</span>
+            <claude-code-button command="/deploy --prod" theme="dark" size="md"></claude-code-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">lg</span>
+            <claude-code-button command="/deploy --prod" theme="dark" size="lg"></claude-code-button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Cowork</div>
+          <div class="card-row">
+            <span class="size-label">sm</span>
+            <cowork-button command="/code-review" theme="dark" size="sm"></cowork-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">md</span>
+            <cowork-button command="/code-review" theme="dark" size="md"></cowork-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">lg</span>
+            <cowork-button command="/code-review" theme="dark" size="lg"></cowork-button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ LIGHT ═══ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">Theme</span>
+        <h2 class="section-title">Light</h2>
+      </div>
+      <p class="section-desc">For light UIs — white surface with terracotta accents.</p>
+      <div class="grid">
+        <div class="card card--light">
+          <div class="card-label">Claude Code</div>
+          <div class="card-row">
+            <span class="size-label">sm</span>
+            <claude-code-button command="/test --coverage" theme="light" size="sm"></claude-code-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">md</span>
+            <claude-code-button command="/test --coverage" theme="light" size="md"></claude-code-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">lg</span>
+            <claude-code-button command="/test --coverage" theme="light" size="lg"></claude-code-button>
+          </div>
+        </div>
+        <div class="card card--light">
+          <div class="card-label">Cowork</div>
+          <div class="card-row">
+            <span class="size-label">sm</span>
+            <cowork-button command="/refactor" theme="light" size="sm"></cowork-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">md</span>
+            <cowork-button command="/refactor" theme="light" size="md"></cowork-button>
+          </div>
+          <div class="card-row">
+            <span class="size-label">lg</span>
+            <cowork-button command="/refactor" theme="light" size="lg"></cowork-button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SYSTEM ═══ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">Theme</span>
+        <h2 class="section-title">System</h2>
+      </div>
+      <p class="section-desc">Automatically switches between light and dark based on your OS preference.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="card-label">Auto-detects <code style="color:var(--terra)">prefers-color-scheme</code></div>
+          <div class="card-row">
+            <claude-code-button command="/auto-theme" theme="system"></claude-code-button>
+            <cowork-button command="/auto-theme" theme="system"></cowork-button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PROGRAMMATIC ═══ -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">API</span>
+        <h2 class="section-title">Programmatic</h2>
+      </div>
+      <p class="section-desc">Buttons created via <code style="color:var(--terra)">createClaudeCodeButton()</code> and <code style="color:var(--terra)">createCoworkButton()</code>.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="card-label">Created via JavaScript</div>
+          <div class="card-row" id="js-target"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ EVENT LOG ═══ -->
+    <section class="log-section">
+      <div class="section-header">
+        <span class="section-tag">Events</span>
+        <h2 class="section-title">Live Event Log</h2>
+      </div>
+      <p class="section-desc">Click any button above — all <code style="color:var(--terra)">cb-copy</code>, <code style="color:var(--terra)">cb-open</code>, <code style="color:var(--terra)">cb-close</code>, and <code style="color:var(--terra)">cb-download</code> events are logged here.</p>
+      <div class="log-panel">
+        <div class="log-header">
+          <span class="log-header-title"><span class="dot-green"></span>Event listener</span>
+          <button class="log-clear" id="log-clear">Clear</button>
+        </div>
+        <div class="log-body" id="log-body">
+          <div class="log-empty">Click a button to see events...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CODE EXAMPLES ═══ -->
+    <section class="code-section">
+      <div class="section-header">
+        <span class="section-tag">Code</span>
+        <h2 class="section-title">Quick Start</h2>
+      </div>
+      <div class="code-tabs">
+        <button class="code-tab" data-active="true" data-tab="html">HTML</button>
+        <button class="code-tab" data-tab="react">React</button>
+        <button class="code-tab" data-tab="vue">Vue</button>
+        <button class="code-tab" data-tab="svelte">Svelte</button>
+        <button class="code-tab" data-tab="angular">Angular</button>
+      </div>
+      <div class="code-block" data-tab="html" data-active="true"><span class="cmt">&lt;!-- CDN — no build step --&gt;</span>
+<span class="tag">&lt;script</span> <span class="kw">src</span>=<span class="str">"https://unpkg.com/claudebuttons"</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+<span class="tag">&lt;claude-code-button</span>
+  <span class="kw">command</span>=<span class="str">"/my-skill --flag"</span>
+  <span class="kw">theme</span>=<span class="str">"branded"</span>
+<span class="tag">&gt;&lt;/claude-code-button&gt;</span>
+
+<span class="tag">&lt;cowork-button</span>
+  <span class="kw">command</span>=<span class="str">"/my-skill"</span>
+  <span class="kw">skill-url</span>=<span class="str">"https://example.com/skill.zip"</span>
+  <span class="kw">theme</span>=<span class="str">"dark"</span>
+<span class="tag">&gt;&lt;/cowork-button&gt;</span></div>
+      <div class="code-block" data-tab="react"><span class="kw">import</span> { <span class="fn">ClaudeCodeButton</span>, <span class="fn">CoworkButton</span> } <span class="kw">from</span> <span class="str">'claudebuttons/react'</span>;
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="fn">ClaudeCodeButton</span>
+        <span class="kw">command</span>=<span class="str">"/my-skill --flag"</span>
+        <span class="kw">theme</span>=<span class="str">"branded"</span>
+        <span class="kw">onCopy</span>={(<span class="str">cmd</span>) =&gt; console.<span class="fn">log</span>(<span class="str">'Copied:'</span>, cmd)}
+      /&gt;
+      &lt;<span class="fn">CoworkButton</span>
+        <span class="kw">command</span>=<span class="str">"/code-review"</span>
+        <span class="kw">skillUrl</span>=<span class="str">"https://example.com/skill.zip"</span>
+        <span class="kw">theme</span>=<span class="str">"dark"</span>
+      /&gt;
+    &lt;/&gt;
+  );
+}</div>
+      <div class="code-block" data-tab="vue"><span class="tag">&lt;script setup&gt;</span>
+<span class="kw">import</span> { <span class="fn">ClaudeButtonsPlugin</span> } <span class="kw">from</span> <span class="str">'claudebuttons/vue'</span>;
+
+<span class="kw">function</span> <span class="fn">onCopy</span>(e) {
+  console.<span class="fn">log</span>(<span class="str">'Copied:'</span>, e.detail.command);
+}
+<span class="tag">&lt;/script&gt;</span>
+
+<span class="tag">&lt;template&gt;</span>
+  <span class="tag">&lt;claude-code-button</span>
+    <span class="kw">command</span>=<span class="str">"/my-skill"</span>
+    <span class="kw">theme</span>=<span class="str">"branded"</span>
+    <span class="kw">@cb-copy</span>=<span class="str">"onCopy"</span>
+  <span class="tag">/&gt;</span>
+  <span class="tag">&lt;cowork-button</span>
+    <span class="kw">command</span>=<span class="str">"/review"</span>
+    <span class="kw">theme</span>=<span class="str">"dark"</span>
+  <span class="tag">/&gt;</span>
+<span class="tag">&lt;/template&gt;</span></div>
+      <div class="code-block" data-tab="svelte"><span class="tag">&lt;script&gt;</span>
+  <span class="kw">import</span> <span class="str">'claudebuttons'</span>;
+
+  <span class="kw">function</span> <span class="fn">handleCopy</span>(e) {
+    console.<span class="fn">log</span>(<span class="str">'Copied:'</span>, e.detail.command);
+  }
+<span class="tag">&lt;/script&gt;</span>
+
+<span class="tag">&lt;claude-code-button</span>
+  <span class="kw">command</span>=<span class="str">"/my-skill"</span>
+  <span class="kw">theme</span>=<span class="str">"branded"</span>
+  <span class="kw">on:cb-copy</span>={<span class="fn">handleCopy</span>}
+<span class="tag">/&gt;</span>
+
+<span class="tag">&lt;cowork-button</span>
+  <span class="kw">command</span>=<span class="str">"/review"</span>
+  <span class="kw">theme</span>=<span class="str">"dark"</span>
+<span class="tag">/&gt;</span></div>
+      <div class="code-block" data-tab="angular"><span class="cmt">// app.module.ts</span>
+<span class="kw">import</span> { <span class="fn">CUSTOM_ELEMENTS_SCHEMA</span> } <span class="kw">from</span> <span class="str">'@angular/core'</span>;
+<span class="kw">import</span> <span class="str">'claudebuttons'</span>;
+
+@<span class="fn">NgModule</span>({
+  <span class="kw">schemas</span>: [<span class="fn">CUSTOM_ELEMENTS_SCHEMA</span>],
+})
+
+<span class="cmt">&lt;!-- component.html --&gt;</span>
+<span class="tag">&lt;claude-code-button</span>
+  <span class="kw">command</span>=<span class="str">"/my-skill"</span>
+  <span class="kw">theme</span>=<span class="str">"branded"</span>
+  <span class="kw">(cb-copy)</span>=<span class="str">"onCopy($event)"</span>
+<span class="tag">&gt;&lt;/claude-code-button&gt;</span>
+
+<span class="tag">&lt;cowork-button</span>
+  <span class="kw">command</span>=<span class="str">"/review"</span>
+  <span class="kw">theme</span>=<span class="str">"dark"</span>
+  <span class="kw">(cb-download)</span>=<span class="str">"onDownload($event)"</span>
+<span class="tag">&gt;&lt;/cowork-button&gt;</span></div>
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <a href="https://github.com/anthropics">claudebuttons</a> — MIT License
+  </footer>
+
+  <script>
+    // ─── Programmatic buttons ───
+    const target = document.getElementById('js-target');
+
+    const ccBtn = ClaudeButtons.createClaudeCodeButton({
+      command: '/deploy --production',
+      theme: 'branded',
+    });
+    target.appendChild(ccBtn);
+
+    const cwBtn = ClaudeButtons.createCoworkButton({
+      command: '/code-review',
+      theme: 'branded',
+      skillUrl: 'https://example.com/code-review-skill.zip',
+    });
+    target.appendChild(cwBtn);
+
+    // ─── Event log ───
+    const logBody = document.getElementById('log-body');
+    const logClear = document.getElementById('log-clear');
+    let hasLogs = false;
+
+    function addLog(eventName, detail) {
+      if (!hasLogs) {
+        logBody.innerHTML = '';
+        hasLogs = true;
+      }
+
+      const now = new Date();
+      const time = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+
+      const detailStr = detail ? JSON.stringify(detail) : '—';
+      entry.innerHTML = `<span class="log-time">${time}</span><span class="log-event">${eventName}</span><span class="log-detail">${detailStr}</span>`;
+
+      logBody.appendChild(entry);
+      logBody.scrollTop = logBody.scrollHeight;
+    }
+
+    ['cb-copy', 'cb-open', 'cb-close', 'cb-download'].forEach(event => {
+      document.addEventListener(event, (e) => {
+        addLog(event, e.detail);
+      });
+    });
+
+    logClear.addEventListener('click', () => {
+      logBody.innerHTML = '<div class="log-empty">Click a button to see events...</div>';
+      hasLogs = false;
+    });
+
+    // ─── Code tabs ───
+    document.querySelectorAll('.code-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabName = tab.dataset.tab;
+        document.querySelectorAll('.code-tab').forEach(t => t.dataset.active = 'false');
+        document.querySelectorAll('.code-block').forEach(b => b.dataset.active = 'false');
+        tab.dataset.active = 'true';
+        document.querySelector(`.code-block[data-tab="${tabName}"]`).dataset.active = 'true';
+      });
+    });
+  </script>
+
+</body>
+</html>

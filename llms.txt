@@ -1,0 +1,120 @@
+# claudebuttons
+
+> Drop-in "Run on Claude Code" and "Run on Cowork" buttons for any website.
+
+## What is this?
+
+claudebuttons is a zero-dependency TypeScript library that provides styled, interactive buttons for launching Claude Code CLI commands and Claude Cowork skills. Built as Web Components, the buttons work in any framework (React, Vue, Svelte, Angular, vanilla HTML).
+
+## Two button types
+
+1. **`<claude-code-button>`** — "Run on Claude Code" button. Copies a `claude -p "/command"` CLI command to the user's clipboard via a styled popup dialog.
+
+2. **`<cowork-button>`** — "Run on Cowork" button. Guides the user through installing a skill package in Claude Desktop's Cowork feature and running a slash command.
+
+## Installation
+
+```
+npm install claudebuttons
+```
+
+CDN: `<script src="https://unpkg.com/claudebuttons"></script>`
+
+## Usage
+
+HTML:
+```html
+<claude-code-button command="/my-skill" theme="branded"></claude-code-button>
+<cowork-button command="/my-skill" skill-url="https://example.com/skill.zip" theme="dark"></cowork-button>
+```
+
+JavaScript:
+```js
+import { createClaudeCodeButton, createCoworkButton } from 'claudebuttons';
+```
+
+React / Next.js:
+```jsx
+import { ClaudeCodeButton, CoworkButton } from 'claudebuttons/react';
+```
+
+Vue / Nuxt:
+```js
+import { ClaudeButtonsPlugin } from 'claudebuttons/vue';
+app.use(ClaudeButtonsPlugin);
+// Then use <claude-code-button> and <cowork-button> in templates with @cb-copy, @cb-download events
+```
+
+Svelte, Angular, Solid, Astro:
+```js
+import 'claudebuttons'; // auto-registers custom elements
+// Use <claude-code-button> and <cowork-button> directly
+// Listen to events: cb-copy, cb-open, cb-close, cb-download
+```
+
+## Themes
+
+- `branded` (default) — Terracotta (#D4795C) background, white text
+- `dark` — Dark background, light text, terracotta accents
+- `light` — White background, dark text, terracotta accents
+- `system` — Auto-switches between light and dark based on prefers-color-scheme
+
+## Sizes
+
+- `sm` — 32px height
+- `md` — 40px height (default)
+- `lg` — 48px height
+
+## Key attributes
+
+claude-code-button: command, theme, size, popup, prompt-flag, popup-title, popup-description
+cowork-button: command, skill-url, theme, size, popup, popup-title, popup-description
+
+## Events
+
+All buttons dispatch native CustomEvents with bubbles:true and composed:true (crosses Shadow DOM):
+- cb-copy: { command: string } — command copied to clipboard
+- cb-open: { command: string } — button clicked / popup opens
+- cb-close: {} — popup closed
+- cb-download: { url: string } — skill package downloaded (cowork only)
+
+## Popup behavior
+
+When popup=true (default), clicking opens a styled modal dialog with:
+- Step-by-step instructions
+- Command display with copy button
+- Download button (cowork-button with skill-url)
+- Keyboard shortcut hints
+
+Set popup="false" to copy directly to clipboard without showing the dialog.
+
+## Exports
+
+Main entry (claudebuttons):
+- ClaudeCodeButton, createClaudeCodeButton, registerClaudeCodeButton
+- CoworkButton, createCoworkButton, registerCoworkButton
+- ClaudePopupDialog, showPopup
+- register() — manually register all custom elements
+- CLAUDE_CODE_ICON, COWORK_ICON — SVG icon strings
+- themes, resolveTheme, BRAND_COLOR — Theme utilities
+
+React entry (claudebuttons/react):
+- ClaudeCodeButton, CoworkButton — React wrapper components with 'use client'
+- Supports onCopy/onDownload props + onCbCopy/onCbOpen/onCbClose/onCbDownload event props
+- SSR-safe, lazy-loads web components
+
+Vue entry (claudebuttons/vue):
+- ClaudeButtonsPlugin — Vue plugin, auto-configures isCustomElement
+
+## Source structure
+
+- src/index.ts — Main entry, re-exports everything, provides register()
+- src/types.ts — TypeScript type definitions
+- src/icons.ts — SVG icon definitions (mascot, lightning bolt, copy, check, etc.)
+- src/themes.ts — Theme token definitions and resolution (rem-based sizing)
+- src/popup-dialog.ts — Popup dialog Web Component (responsive, mobile-optimized)
+- src/claude-code-button.ts — Claude Code button Web Component with CustomEvents
+- src/cowork-button.ts — Cowork button Web Component with CustomEvents
+- src/react.ts — React wrapper components ('use client', SSR-safe, lazy-loaded)
+- src/vue.ts — Vue plugin with isCustomElement auto-configuration
+- src/jsx.d.ts — Type augmentations for React JSX, Vue GlobalComponents, Solid, Svelte

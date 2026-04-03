@@ -1,0 +1,68 @@
+export type Theme = 'branded' | 'dark' | 'light' | 'system';
+export type Size = 'sm' | 'md' | 'lg';
+
+export interface ClaudeCodeButtonOptions {
+  /** The command or skill to run in Claude Code (e.g. "/my-skill --flag") */
+  command: string;
+  /** Theme variant. Default: 'branded' */
+  theme?: Theme;
+  /** Button size. Default: 'md' */
+  size?: Size;
+  /** Whether to show a popup dialog on click. Default: true */
+  popup?: boolean;
+  /** Custom prompt flag value (prepended as `claude -p`). Default: true */
+  promptFlag?: boolean;
+  /** Callback fired after the command is copied to clipboard */
+  onCopy?: (command: string) => void;
+  /** Custom popup title */
+  popupTitle?: string;
+  /** Custom popup description */
+  popupDescription?: string;
+}
+
+export interface CoworkButtonOptions {
+  /** The slash command to run in Cowork (e.g. "/my-skill") */
+  command: string;
+  /** URL to a downloadable skill package (.zip, SKILL.md, or plugin.json) */
+  skillUrl?: string;
+  /** Theme variant. Default: 'branded' */
+  theme?: Theme;
+  /** Button size. Default: 'md' */
+  size?: Size;
+  /** Whether to show a popup dialog on click. Default: true */
+  popup?: boolean;
+  /** Callback fired after the command is copied */
+  onCopy?: (command: string) => void;
+  /** Callback fired when the skill package is downloaded */
+  onDownload?: (url: string) => void;
+  /** Custom popup title */
+  popupTitle?: string;
+  /** Custom popup description */
+  popupDescription?: string;
+}
+
+export interface PopupOptions {
+  variant: 'claude-code' | 'cowork';
+  theme: Theme;
+  title: string;
+  description?: string;
+  command: string;
+  fullCommand?: string;
+  skillUrl?: string;
+  onCopy?: (command: string) => void;
+  onDownload?: (url: string) => void;
+  onClose?: () => void;
+}
+
+export interface ThemeTokens {
+  bg: string;
+  text: string;
+  border: string;
+  surface: string;
+  surfaceText: string;
+  muted: string;
+  primary: string;
+  primaryText: string;
+  codeBg: string;
+  codeText: string;
+}
