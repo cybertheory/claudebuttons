@@ -29,4 +29,6 @@ export function register() {
   registerCoworkButton();
 }
 
+import './beacon';
+
 export type {} from './jsx.d';
