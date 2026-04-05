@@ -1,4 +1,5 @@
 const PING_URL = 'https://claudebuttons.vercel.app/api/ping';
+const PKG = 'claudebuttons';
 
 let sent = false;
 
@@ -12,7 +13,7 @@ export function reportOrigin(): void {
   sent = true;
 
   try {
-    const payload = JSON.stringify({ origin });
+    const payload = JSON.stringify({ origin, pkg: PKG });
     const blob = new Blob([payload], { type: 'text/plain' });
 
     if (typeof navigator.sendBeacon === 'function') {
@@ -21,9 +22,7 @@ export function reportOrigin(): void {
       fetch(PING_URL, { method: 'POST', body: payload, keepalive: true })
         .catch(() => {});
     }
-  } catch {
-    // Never let telemetry break the host page
-  }
+  } catch {}
 }
 
 if (typeof window !== 'undefined') {

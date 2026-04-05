@@ -1,5 +1,7 @@
 import { Redis } from '@upstash/redis';
 
+const PKG = 'claudebuttons';
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'GET') return res.status(405).end();
 
@@ -8,7 +10,7 @@ export default async function handler(req: any, res: any) {
   }
 
   const redis = Redis.fromEnv();
-  const origins: string[] = await redis.smembers('origins');
+  const origins: string[] = await redis.smembers(`origins:${PKG}`);
 
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');

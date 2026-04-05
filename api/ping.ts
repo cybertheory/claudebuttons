@@ -1,6 +1,7 @@
 import { Redis } from '@upstash/redis';
 
 const ORIGIN_RE = /^https?:\/\/[a-z0-9]([a-z0-9\-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9\-]*[a-z0-9])?)*(:\d{1,5})?$/i;
+const ALLOWED_PKGS = new Set(['claudebuttons', 'hermesbuttons', 'clawbuttons', 'agentbuttons']);
 const MAX_LEN = 256;
 
 export default async function handler(req: any, res: any) {
@@ -17,7 +18,11 @@ export default async function handler(req: any, res: any) {
   }
 
   const origin = body?.origin;
+  const pkg = body?.pkg;
   if (typeof origin !== 'string' || origin.length > MAX_LEN || !ORIGIN_RE.test(origin)) {
+    return res.status(400).end();
+  }
+  if (typeof pkg !== 'string' || !ALLOWED_PKGS.has(pkg)) {
     return res.status(400).end();
   }
 
@@ -26,6 +31,6 @@ export default async function handler(req: any, res: any) {
   }
 
   const redis = Redis.fromEnv();
-  await redis.sadd('origins', origin);
+  await redis.sadd(`origins:${pkg}`, origin);
   return res.status(204).end();
 }
